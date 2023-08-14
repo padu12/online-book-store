@@ -1,5 +1,6 @@
 package com.kaziamyr.onlinebookstore.repository.impl;
 
+import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import java.util.List;
@@ -46,7 +47,16 @@ public class BookRepositoryImpl implements BookRepository {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(query, Book.class).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can't get all books from db");
+            throw new EntityNotFoundException("Can't get all books from db", e);
+        }
+    }
+
+    @Override
+    public Book getBookById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Book.class, id);
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Can't get book by id " + id, e);
         }
     }
 }
