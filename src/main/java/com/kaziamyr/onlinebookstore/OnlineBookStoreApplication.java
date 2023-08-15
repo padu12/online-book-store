@@ -3,6 +3,7 @@ package com.kaziamyr.onlinebookstore;
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.service.BookService;
 import java.math.BigDecimal;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 public class OnlineBookStoreApplication {
     private final BookService bookService;
 
+    @Autowired
     public OnlineBookStoreApplication(BookService bookService) {
         this.bookService = bookService;
     }
