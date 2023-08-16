@@ -1,12 +1,8 @@
 package com.kaziamyr.onlinebookstore.repository;
 
 import com.kaziamyr.onlinebookstore.model.Book;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BookRepository {
-    Book save(Book book);
-
-    List<Book> findAll();
-
+public interface BookRepository extends JpaRepository<Book, Long> {
     Book getBookById(Long id);
 }
