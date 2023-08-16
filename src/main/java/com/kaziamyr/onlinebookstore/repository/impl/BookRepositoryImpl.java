@@ -3,6 +3,7 @@ package com.kaziamyr.onlinebookstore.repository.impl;
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import java.util.List;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -31,7 +32,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't add book: " + book);
+            throw new HibernateException("Can't add book: " + book);
         } finally {
             if (session != null) {
                 session.close();
@@ -46,7 +47,7 @@ public class BookRepositoryImpl implements BookRepository {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(query, Book.class).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can't get all books from db");
+            throw new HibernateException("Can't get all books from db");
         }
     }
 }
