@@ -58,7 +58,6 @@ public class BookRepositoryImpl implements BookRepository {
             return session.get(Book.class, id);
         } catch (Exception e) {
             throw new EntityNotFoundException("Can't get book by id " + id, e);
-
         }
     }
 }
