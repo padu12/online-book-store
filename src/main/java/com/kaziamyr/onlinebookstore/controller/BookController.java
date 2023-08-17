@@ -4,6 +4,7 @@ import com.kaziamyr.onlinebookstore.dto.BookDto;
 import com.kaziamyr.onlinebookstore.dto.CreateBookRequestDto;
 import com.kaziamyr.onlinebookstore.service.BookService;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,4 +49,10 @@ public class BookController {
     public BookDto updateById(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
         return bookService.updateById(id, bookDto);
     }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(@RequestParam Map<String, String> params) {
+        return bookService.getAll(params);
+    }
+
 }
