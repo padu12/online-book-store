@@ -10,23 +10,16 @@ import com.kaziamyr.onlinebookstore.specification.SpecificationProvider;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final SpecificationProvider specificationProvider;
-
-    @Autowired
-    public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper,
-                           SpecificationProvider specificationProvider) {
-        this.bookRepository = bookRepository;
-        this.bookMapper = bookMapper;
-        this.specificationProvider = specificationProvider;
-    }
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
