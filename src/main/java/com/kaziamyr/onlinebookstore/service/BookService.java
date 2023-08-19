@@ -4,11 +4,12 @@ import com.kaziamyr.onlinebookstore.dto.BookDto;
 import com.kaziamyr.onlinebookstore.dto.CreateBookRequestDto;
 import java.util.List;
 import java.util.Map;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
     BookDto save(CreateBookRequestDto book);
 
-    List<BookDto> findAll();
+    List<BookDto> findAll(Pageable pageable);
 
     List<BookDto> getAll(Map<String, String> params);
 
