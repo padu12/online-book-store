@@ -3,6 +3,7 @@ package com.kaziamyr.onlinebookstore.controller;
 import com.kaziamyr.onlinebookstore.dto.BookDto;
 import com.kaziamyr.onlinebookstore.dto.CreateBookRequestDto;
 import com.kaziamyr.onlinebookstore.service.BookService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody CreateBookRequestDto bookDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
