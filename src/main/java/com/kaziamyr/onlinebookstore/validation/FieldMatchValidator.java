@@ -2,7 +2,9 @@ package com.kaziamyr.onlinebookstore.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
+import org.springframework.util.StringUtils;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch,
         Object> {
@@ -18,12 +20,22 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch,
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext context) {
         try {
-            Object firstFieldValue = object.getClass().getDeclaredField(firstField).get(object);
-            Object secondFieldValue = object.getClass().getDeclaredField(secondField).get(object);
+            Object firstFieldValue =
+                    object.getClass()
+                            .getMethod("get" + StringUtils.capitalize(firstField))
+                            .invoke(object);
+            Object secondFieldValue =
+                    object.getClass()
+                            .getMethod("get" + StringUtils.capitalize(firstField))
+                            .invoke(object);
             return Objects.equals(firstFieldValue, secondFieldValue);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException("Can't find field with name " + firstField + " of "
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Can't---- find field with name " + firstField + " of "
                     + secondField);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
 
     }
