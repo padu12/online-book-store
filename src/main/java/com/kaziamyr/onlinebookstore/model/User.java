@@ -5,9 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -23,12 +25,16 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
+    @ToString.Exclude
     private String password;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
     private String lastName;
     private String shoppingAddress;
+    @JoinColumn(nullable = false)
     @ManyToOne
     private Role role;
+    @Column(nullable = false)
+    private boolean isDeleted;
 }
