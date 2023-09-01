@@ -1,7 +1,7 @@
 package com.kaziamyr.onlinebookstore.service.impl;
 
 import com.kaziamyr.onlinebookstore.dto.UserRegistrationRequestDto;
-import com.kaziamyr.onlinebookstore.dto.UserResponseDto;
+import com.kaziamyr.onlinebookstore.dto.UserRegistrationResponseDto;
 import com.kaziamyr.onlinebookstore.exception.RegistrationException;
 import com.kaziamyr.onlinebookstore.mapper.UserMapper;
 import com.kaziamyr.onlinebookstore.model.User;
@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserResponseDto register(UserRegistrationRequestDto request)
+    public UserRegistrationResponseDto register(UserRegistrationRequestDto request)
             throws RegistrationException {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RegistrationException("User with email "

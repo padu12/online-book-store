@@ -4,7 +4,7 @@ import com.kaziamyr.onlinebookstore.model.Role;
 import lombok.Data;
 
 @Data
-public class UserResponseDto {
+public class UserRegistrationResponseDto {
     private Long id;
     private String email;
     private String firstName;
