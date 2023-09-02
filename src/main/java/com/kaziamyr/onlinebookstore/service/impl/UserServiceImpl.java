@@ -8,6 +8,7 @@ import com.kaziamyr.onlinebookstore.model.Role;
 import com.kaziamyr.onlinebookstore.model.User;
 import com.kaziamyr.onlinebookstore.repository.UserRepository;
 import com.kaziamyr.onlinebookstore.service.UserService;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
-        user.setRole(new Role(1L, Role.RoleName.ROLE_USER));
+        user.setRoles(Set.of(new Role(1L, Role.RoleName.ROLE_USER)));
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setShoppingAddress(request.getShoppingAddress());

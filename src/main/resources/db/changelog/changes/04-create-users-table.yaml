@@ -38,11 +38,6 @@ databaseChangeLog:
                   name: shopping_address
                   type: varchar(255)
               - column:
-                  name: role_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-              - column:
                   name: is_deleted
                   type: boolean
                   constraints:

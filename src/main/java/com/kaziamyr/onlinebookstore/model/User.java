@@ -6,10 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
@@ -38,15 +40,28 @@ public class User implements UserDetails {
     private String lastName;
     private String shoppingAddress;
     @JoinColumn(nullable = false)
-    @ManyToOne
-    private Role role;
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @ToString.Exclude
+    private Set<Role> roles = new HashSet<>();
     @Column(nullable = false)
     private boolean isDeleted;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        Set<GrantedAuthority> authorities = new HashSet<>();
+
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName().toString()));
+        }
+
+        return authorities;
     }
+
 
     @Override
     public String getUsername() {
