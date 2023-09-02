@@ -1,6 +1,5 @@
 package com.kaziamyr.onlinebookstore.dto;
 
-import com.kaziamyr.onlinebookstore.model.Role;
 import com.kaziamyr.onlinebookstore.validation.FieldMatch;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +22,4 @@ public class UserRegistrationRequestDto {
     @NotNull
     private String lastName;
     private String shoppingAddress;
-    @NotNull
-    private Role role;
 }

@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private final BookService bookService;
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public List<BookDto> findAll() {
         return bookService.findAll();
@@ -37,17 +36,20 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         bookService.deleteById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public BookDto updateById(@PathVariable Long id,
                               @RequestBody @Valid CreateBookRequestDto bookDto) {

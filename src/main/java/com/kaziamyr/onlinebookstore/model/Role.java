@@ -8,9 +8,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -21,8 +25,8 @@ public class Role {
     @Column(nullable = false, unique = true)
     private RoleName roleName;
 
-    enum RoleName {
-        USER,
-        ADMIN
+    public enum RoleName {
+        ROLE_USER,
+        ROLE_ADMIN
     }
 }
