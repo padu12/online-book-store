@@ -1,7 +1,7 @@
 package com.kaziamyr.onlinebookstore.service.impl;
 
-import com.kaziamyr.onlinebookstore.dto.UserRegistrationRequestDto;
-import com.kaziamyr.onlinebookstore.dto.UserRegistrationResponseDto;
+import com.kaziamyr.onlinebookstore.dto.user.UserRegistrationRequestDto;
+import com.kaziamyr.onlinebookstore.dto.user.UserRegistrationResponseDto;
 import com.kaziamyr.onlinebookstore.exception.RegistrationException;
 import com.kaziamyr.onlinebookstore.mapper.UserMapper;
 import com.kaziamyr.onlinebookstore.model.Role;

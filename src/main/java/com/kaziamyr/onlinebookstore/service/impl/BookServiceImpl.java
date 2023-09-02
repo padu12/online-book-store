@@ -1,7 +1,7 @@
 package com.kaziamyr.onlinebookstore.service.impl;
 
-import com.kaziamyr.onlinebookstore.dto.BookDto;
-import com.kaziamyr.onlinebookstore.dto.CreateBookRequestDto;
+import com.kaziamyr.onlinebookstore.dto.book.BookDto;
+import com.kaziamyr.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.kaziamyr.onlinebookstore.mapper.BookMapper;
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;

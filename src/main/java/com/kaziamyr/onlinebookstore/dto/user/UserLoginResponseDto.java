@@ -1,4 +1,4 @@
-package com.kaziamyr.onlinebookstore.dto;
+package com.kaziamyr.onlinebookstore.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.kaziamyr.onlinebookstore.service.impl;
 
-import com.kaziamyr.onlinebookstore.dto.UserLoginRequestDto;
-import com.kaziamyr.onlinebookstore.dto.UserLoginResponseDto;
+import com.kaziamyr.onlinebookstore.dto.user.UserLoginRequestDto;
+import com.kaziamyr.onlinebookstore.dto.user.UserLoginResponseDto;
 import com.kaziamyr.onlinebookstore.security.JwtUtil;
 import com.kaziamyr.onlinebookstore.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
