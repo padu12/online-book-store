@@ -11,15 +11,18 @@ import lombok.Data;
 public class UserRegistrationRequestDto {
     @NotNull
     @Email
+    @Size(min = 1, max = 100)
     private String email;
     @NotNull
-    @Size(min = 8, max = 16)
+    @Size(min = 8, max = 30)
     private String password;
     @NotNull
     private String repeatPassword;
     @NotNull
+    @Size(min = 1, max = 100)
     private String firstName;
     @NotNull
+    @Size(min = 1, max = 100)
     private String lastName;
     private String shoppingAddress;
 }
