@@ -56,7 +56,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/books")
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id) {
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id) {
         return categoryService.findAllBooksByCategoryId(id);
     }
 }

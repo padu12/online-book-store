@@ -3,13 +3,13 @@ package com.kaziamyr.onlinebookstore.service.impl;
 import com.kaziamyr.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.kaziamyr.onlinebookstore.dto.category.CategoryDto;
 import com.kaziamyr.onlinebookstore.dto.category.SaveCategoryRequestDto;
+import com.kaziamyr.onlinebookstore.mapper.BookMapper;
 import com.kaziamyr.onlinebookstore.mapper.CategoryMapper;
 import com.kaziamyr.onlinebookstore.model.Category;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import com.kaziamyr.onlinebookstore.repository.CategoryRepository;
 import com.kaziamyr.onlinebookstore.service.CategoryService;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final BookMapper bookMapper;
 
     @Override
     public List<CategoryDto> findAll() {
@@ -29,8 +30,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<BookDtoWithoutCategoryIds> findAllBooksByCategoryId(Long id) {
-        Set<Category> categories = Set.of(categoryRepository.getCategoryById(id));
-        return bookRepository.findAllByCategoriesIn(categories);
+        return bookRepository.findAllByCategoryId(id).stream()
+                .map(bookMapper::toDtoWithoutCategories)
+                .toList();
     }
 
     @Override

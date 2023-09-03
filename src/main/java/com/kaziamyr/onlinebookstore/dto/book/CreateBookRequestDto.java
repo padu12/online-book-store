@@ -18,6 +18,7 @@ public class CreateBookRequestDto {
     @NotNull
     @ISBN
     private String isbn;
+    private Long[] categoryIds;
     @NotNull
     @Min(0)
     private BigDecimal price;

@@ -5,11 +5,14 @@ import com.kaziamyr.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.kaziamyr.onlinebookstore.mapper.BookMapper;
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
+import com.kaziamyr.onlinebookstore.repository.CategoryRepository;
 import com.kaziamyr.onlinebookstore.service.BookService;
 import com.kaziamyr.onlinebookstore.specification.SpecificationProvider;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -18,12 +21,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
-    private final SpecificationProvider specificationProvider;
+    private final SpecificationProvider<Book> specificationProvider;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
+        book.setCategories(
+                Stream.of(requestDto.getCategoryIds())
+                        .map(categoryRepository::getCategoryById)
+                        .collect(Collectors.toSet())
+        );
         return bookMapper.toDto(bookRepository.save(book));
     }
 
