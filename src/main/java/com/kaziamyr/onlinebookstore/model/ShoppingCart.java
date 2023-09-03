@@ -9,8 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -28,7 +28,7 @@ public class ShoppingCart {
     @JoinColumn(nullable = false)
     private User user;
     @OneToMany(mappedBy = "shoppingCart")
-    private Set<CartItem> cartItems = new HashSet<>();
+    private List<CartItem> cartItems = new ArrayList<>();
     @Column(nullable = false)
     private boolean isDeleted;
 }

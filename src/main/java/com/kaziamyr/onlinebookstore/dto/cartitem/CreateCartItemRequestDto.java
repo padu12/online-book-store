@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateCartItemRequestDto {
-    private Long book_id;
+    private Long bookId;
     private int quantity;
 }
