@@ -34,7 +34,7 @@ public interface CartItemMapper {
     @BeforeMapping
     default void addBookId(@MappingTarget CartItemDto cartItemDto, CartItem cartItem) {
         Book book = cartItem.getBook();
-        if (book != null && book.getId() != null) {
+        if (book != null) {
             cartItemDto.setBookId(book.getId());
         }
     }

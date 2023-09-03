@@ -4,6 +4,7 @@ import com.kaziamyr.onlinebookstore.dto.cartitem.CartItemDto;
 import com.kaziamyr.onlinebookstore.dto.cartitem.CreateCartItemRequestDto;
 import com.kaziamyr.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
 import com.kaziamyr.onlinebookstore.mapper.CartItemMapper;
+import com.kaziamyr.onlinebookstore.mapper.ShoppingCartMapper;
 import com.kaziamyr.onlinebookstore.model.CartItem;
 import com.kaziamyr.onlinebookstore.model.ShoppingCart;
 import com.kaziamyr.onlinebookstore.model.User;
@@ -26,11 +27,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final BookRepository bookRepository;
     private final CartItemRepository cartItemRepository;
     private final CartItemMapper cartItemMapper;
+    private final ShoppingCartMapper shoppingCartMapper;
 
     @Override
     public ShoppingCartDto getShoppingCartByUser() {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
-        return null;
+        ShoppingCartDto shoppingCartDto = shoppingCartMapper.toDto(shoppingCart);
+        shoppingCartDto.setCartItems(
+                shoppingCart.getCartItems().stream()
+                        .map(cartItemMapper::toCartItemWithBookTitle)
+                        .toList()
+        );
+        return shoppingCartDto;
     }
 
     @Override
@@ -52,7 +60,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         User user = (User) authentication.getPrincipal();
         Optional<ShoppingCart> shoppingCartOptional =
                 shoppingCartRepository.findShoppingCartByUser(user);
-        ShoppingCart shoppingCart = null;
+        ShoppingCart shoppingCart;
         if (shoppingCartOptional.isEmpty()) {
             ShoppingCart newShoppingCart = new ShoppingCart();
             newShoppingCart.setUser(user);
