@@ -2,7 +2,9 @@ package com.kaziamyr.onlinebookstore.service.impl;
 
 import com.kaziamyr.onlinebookstore.dto.cartitem.CartItemDto;
 import com.kaziamyr.onlinebookstore.dto.cartitem.CreateCartItemRequestDto;
+import com.kaziamyr.onlinebookstore.dto.cartitem.PutCartItemRequestDto;
 import com.kaziamyr.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
+import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.mapper.CartItemMapper;
 import com.kaziamyr.onlinebookstore.mapper.ShoppingCartMapper;
 import com.kaziamyr.onlinebookstore.model.CartItem;
@@ -44,15 +46,42 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public CartItemDto addBookToShoppingCart(CreateCartItemRequestDto request) {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
-        CartItem cartItem = cartItemMapper.toModel(request);
-        cartItem.setShoppingCart(shoppingCart);
-        cartItem.setBook(bookRepository.getBookById(request.getBookId()));
-        cartItem = cartItemRepository.save(cartItem);
         List<CartItem> cartItems = new ArrayList<>(shoppingCart.getCartItems());
-        cartItems.add(cartItem);
+        CartItem cartItem;
+        Optional<CartItem> optionalPresentCartItem = cartItems.stream()
+                .filter(cartItem1 -> cartItem1.getBook().getId().equals(request.getBookId()))
+                .findAny();
+        if (optionalPresentCartItem.isPresent()) {
+            cartItem = optionalPresentCartItem.get();
+            cartItem.setQuantity(cartItem.getQuantity() + request.getQuantity());
+            cartItems.set(cartItems.indexOf(optionalPresentCartItem.get()), cartItem);
+        } else {
+            cartItem = cartItemMapper.toModel(request);
+            cartItem.setShoppingCart(shoppingCart);
+            cartItem.setBook(bookRepository.getBookById(request.getBookId()));
+            cartItem = cartItemRepository.save(cartItem);
+            cartItems.add(cartItem);
+        }
         shoppingCart.setCartItems(cartItems);
         shoppingCartRepository.save(shoppingCart);
         return cartItemMapper.toCartItemDto(cartItem);
+    }
+
+    @Override
+    public CartItemDto updateBookInShoppingCart(Long id, PutCartItemRequestDto request) {
+        ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
+        List<CartItem> cartItems = new ArrayList<>(shoppingCart.getCartItems());
+        CartItem presentCartItem = cartItems.stream()
+                .filter(cartItem1 -> cartItem1.getId().equals(id))
+                .findAny().orElseThrow(
+                        () -> new EntityNotFoundException("Can't update books count for"
+                                + " cart item with id" + id)
+                );
+        presentCartItem.setQuantity(request.getQuantity());
+        cartItems.set(cartItems.indexOf(presentCartItem), presentCartItem);
+        shoppingCart.setCartItems(cartItems);
+        shoppingCartRepository.save(shoppingCart);
+        return cartItemMapper.toCartItemDto(presentCartItem);
     }
 
     private ShoppingCart getOrCreateUsersShoppingCart() {

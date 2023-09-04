@@ -34,7 +34,7 @@ public class ShoppingCartController {
     @PutMapping("/cart-items/{id}")
     public CartItemDto updateBooksInShoppingCart(@PathVariable Long id,
                                                  @RequestBody PutCartItemRequestDto request) {
-        return null;
+        return shoppingCartService.updateBookInShoppingCart(id, request);
     }
 
     @DeleteMapping("/cart-items/{id}")
