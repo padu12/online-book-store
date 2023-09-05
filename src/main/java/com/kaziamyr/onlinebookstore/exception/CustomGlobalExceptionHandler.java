@@ -1,6 +1,7 @@
 package com.kaziamyr.onlinebookstore.exception;
 
 import jakarta.annotation.Nonnull;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,10 +41,21 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<Object> handleRegistrationException(
             RegistrationException ex
     ) {
+        return getSimpleObjectResponseEntity(ex.getMessage());
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(
+            SQLIntegrityConstraintViolationException ex
+    ) {
+        return getSimpleObjectResponseEntity(ex.getMessage());
+    }
+
+    private ResponseEntity<Object> getSimpleObjectResponseEntity(String message) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.CONFLICT);
-        body.put("error", ex.getMessage());
+        body.put("error", message);
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
