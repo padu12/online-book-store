@@ -84,6 +84,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartItemMapper.toCartItemDto(presentCartItem);
     }
 
+    @Override
+    public void deleteBookFromShoppingCartById(Long id) {
+        cartItemRepository.deleteById(id);
+    }
+
     private ShoppingCart getOrCreateUsersShoppingCart() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();

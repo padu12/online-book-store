@@ -11,4 +11,6 @@ public interface ShoppingCartService {
     CartItemDto addBookToShoppingCart(CreateCartItemRequestDto request);
 
     CartItemDto updateBookInShoppingCart(Long id, PutCartItemRequestDto request);
+
+    void deleteBookFromShoppingCartById(Long id);
 }

@@ -38,7 +38,7 @@ public class ShoppingCartController {
     }
 
     @DeleteMapping("/cart-items/{id}")
-    public void deleteBookFromShoppingC0art(@PathVariable Long id) {
-
+    public void deleteBookFromShoppingCart(@PathVariable Long id) {
+        shoppingCartService.deleteBookFromShoppingCartById(id);
     }
 }
