@@ -58,7 +58,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         } else {
             cartItem = cartItemMapper.toModel(request);
             cartItem.setShoppingCart(shoppingCart);
-            cartItem.setBook(bookRepository.getBookById(request.getBookId()));
+            cartItem.setBook(bookRepository.findBookById(request.getBookId()).orElseThrow(
+                    () -> new EntityNotFoundException("Can't find book with id "
+                            + request.getBookId())
+            ));
             cartItem = cartItemRepository.save(cartItem);
             cartItems.add(cartItem);
         }
@@ -101,6 +104,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart = shoppingCartRepository.save(newShoppingCart);
         } else {
             shoppingCart = shoppingCartOptional.get();
+            shoppingCart.setCartItems(cartItemRepository.findAllByShoppingCart(shoppingCart));
         }
         return shoppingCart;
     }

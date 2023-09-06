@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -28,6 +30,8 @@ public class ShoppingCart {
     @JoinColumn(nullable = false)
     private User user;
     @OneToMany(mappedBy = "shoppingCart")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<CartItem> cartItems = new ArrayList<>();
     @Column(nullable = false)
     private boolean isDeleted;
