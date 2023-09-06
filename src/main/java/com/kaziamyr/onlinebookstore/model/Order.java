@@ -2,11 +2,12 @@ package com.kaziamyr.onlinebookstore.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -31,6 +32,7 @@ public class Order {
     @OneToOne
     @JoinColumn(nullable = false)
     private User user;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
     @Column(nullable = false)
@@ -39,12 +41,7 @@ public class Order {
     private LocalDateTime orderDate;
     @Column(nullable = false)
     private String shippingAddress;
-    @OneToMany
-    @JoinTable(
-            name = "orders_order_items",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_item_id")
-    )
+    @OneToMany(mappedBy = "order")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OrderItem> orderItems;
@@ -52,6 +49,8 @@ public class Order {
     private boolean isDeleted;
 
     public enum Status {
-
+        COMPLETED,
+        PENDING,
+        DELIVERED
     }
 }
