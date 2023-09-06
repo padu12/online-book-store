@@ -6,8 +6,12 @@ import com.kaziamyr.onlinebookstore.mapper.BookMapper;
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import com.kaziamyr.onlinebookstore.service.BookService;
+import com.kaziamyr.onlinebookstore.specification.SpecificationProvider;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final SpecificationProvider<Book> specificationProvider;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -32,5 +37,30 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto getBookById(Long id) {
         return bookMapper.toDto(bookRepository.getBookById(id));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    @Override
+    public BookDto updateById(Long id, CreateBookRequestDto bookDto) {
+        Book updatedBook = bookMapper.toModel(bookDto);
+        updatedBook.setId(id);
+        return bookMapper.toDto(bookRepository.save(updatedBook));
+    }
+
+    public List<BookDto> getAll(Map<String, String> params) {
+        Specification<Book> specification = Specification.where(null);
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            List<String> listOfValues = Arrays.asList(entry.getValue().split(","));
+            Specification<Book> sp =
+                    specificationProvider.getSpecification(listOfValues, entry.getKey());
+            specification = specification.and(sp);
+        }
+        return bookRepository.findAll(specification).stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }
