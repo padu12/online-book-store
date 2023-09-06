@@ -15,6 +15,7 @@ import com.kaziamyr.onlinebookstore.repository.CartItemRepository;
 import com.kaziamyr.onlinebookstore.repository.ShoppingCartRepository;
 import com.kaziamyr.onlinebookstore.service.ShoppingCartService;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +66,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             cartItem = cartItemRepository.save(cartItem);
             cartItems.add(cartItem);
         }
-        shoppingCart.setCartItems(cartItems);
+        shoppingCart.setCartItems(new HashSet<>(cartItems));
         shoppingCartRepository.save(shoppingCart);
         return cartItemMapper.toCartItemDto(cartItem);
     }
@@ -82,7 +83,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 );
         presentCartItem.setQuantity(request.getQuantity());
         cartItems.set(cartItems.indexOf(presentCartItem), presentCartItem);
-        shoppingCart.setCartItems(cartItems);
+        shoppingCart.setCartItems(new HashSet<>(cartItems));
         shoppingCartRepository.save(shoppingCart);
         return cartItemMapper.toCartItemDto(presentCartItem);
     }
@@ -104,7 +105,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart = shoppingCartRepository.save(newShoppingCart);
         } else {
             shoppingCart = shoppingCartOptional.get();
-            shoppingCart.setCartItems(cartItemRepository.findAllByShoppingCart(shoppingCart));
+            shoppingCart.setCartItems(
+                    new HashSet<>(cartItemRepository.findAllByShoppingCart(shoppingCart)));
         }
         return shoppingCart;
     }
