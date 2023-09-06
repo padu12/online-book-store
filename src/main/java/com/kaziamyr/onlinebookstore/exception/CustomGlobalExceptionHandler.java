@@ -45,7 +45,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<Object> handleSQLIntegrityConstraintViolationException(
+    public ResponseEntity<Object> handleSqlIntegrityConstraintViolationException(
             SQLIntegrityConstraintViolationException ex
     ) {
         return getSimpleObjectResponseEntity(ex.getMessage());
