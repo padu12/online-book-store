@@ -105,7 +105,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart = shoppingCartRepository.save(newShoppingCart);
         } else {
             shoppingCart = shoppingCartOptional.get();
-            shoppingCart.setCartItems(new HashSet<>(cartItemRepository.findAllByShoppingCart(shoppingCart)));
+            shoppingCart.setCartItems(
+                    new HashSet<>(cartItemRepository.findAllByShoppingCart(shoppingCart)));
         }
         return shoppingCart;
     }
