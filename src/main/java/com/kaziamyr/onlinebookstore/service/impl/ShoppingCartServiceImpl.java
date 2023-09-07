@@ -93,7 +93,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItemRepository.deleteById(id);
     }
 
-    private ShoppingCart getOrCreateUsersShoppingCart() {
+    public ShoppingCart getOrCreateUsersShoppingCart() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Optional<ShoppingCart> shoppingCartOptional =

@@ -6,8 +6,11 @@ import com.kaziamyr.onlinebookstore.dto.cartitem.CartItemWithBookTitleDto;
 import com.kaziamyr.onlinebookstore.dto.cartitem.CreateCartItemRequestDto;
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.model.CartItem;
+import com.kaziamyr.onlinebookstore.model.OrderItem;
+import java.math.BigDecimal;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
@@ -40,4 +43,16 @@ public interface CartItemMapper {
     }
 
     CartItemDto toCartItemDto(CartItem cartItem);
+
+    @BeforeMapping
+    default void addPrice(@MappingTarget OrderItem orderItem, CartItem cartItem) {
+        Book book = cartItem.getBook();
+        if (book != null) {
+            BigDecimal quantityOfBooks = BigDecimal.valueOf(cartItem.getQuantity());
+            orderItem.setPrice(book.getPrice().multiply(quantityOfBooks));
+        }
+    }
+
+    @Mapping(ignore = true, target = "id")
+    OrderItem toOrderItem(CartItem cartItem);
 }
