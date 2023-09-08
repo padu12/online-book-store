@@ -5,6 +5,7 @@ import com.kaziamyr.onlinebookstore.dto.OrderDto;
 import com.kaziamyr.onlinebookstore.model.Order;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
@@ -18,5 +19,6 @@ public interface OrderMapper {
         }
     }
 
+    @Mapping(ignore = true, target = "orderItems")
     OrderDto toDto(Order order);
 }

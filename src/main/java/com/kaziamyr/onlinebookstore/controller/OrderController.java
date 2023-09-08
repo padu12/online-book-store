@@ -30,9 +30,10 @@ public class OrderController {
         return orderService.createOrder(requestBody);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
     public List<OrderDto> retrieveOrderHistory() {
-        return null;
+        return orderService.findAllByUser();
     }
 
     @PatchMapping
