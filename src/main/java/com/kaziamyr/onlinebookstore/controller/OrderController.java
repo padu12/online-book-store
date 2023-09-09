@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -34,8 +35,8 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
     @Operation(summary = "Retrieve user's order history")
-    public List<OrderDto> retrieveUsersHistory() {
-        return orderService.findAllByUser();
+    public List<OrderDto> retrieveUsersHistory(Pageable pageable) {
+        return orderService.findAllByUser(pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

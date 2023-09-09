@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -65,8 +66,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findAllByUser() {
-        List<Order> allOrders = orderRepository.findAllByUser(getCurrentUser());
+    public List<OrderDto> findAllByUser(Pageable pageable) {
+        List<Order> allOrders = orderRepository.findAllByUser(pageable, getCurrentUser());
         return allOrders.stream()
                 .map(order -> {
                     OrderDto orderDto = orderMapper.toDto(order);
