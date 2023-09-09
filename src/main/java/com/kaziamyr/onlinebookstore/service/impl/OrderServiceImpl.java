@@ -1,6 +1,8 @@
 package com.kaziamyr.onlinebookstore.service.impl;
 
 import com.kaziamyr.onlinebookstore.dto.OrderDto;
+import com.kaziamyr.onlinebookstore.dto.OrderItemDto;
+import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.mapper.CartItemMapper;
 import com.kaziamyr.onlinebookstore.mapper.OrderItemMapper;
 import com.kaziamyr.onlinebookstore.mapper.OrderMapper;
@@ -15,6 +17,7 @@ import com.kaziamyr.onlinebookstore.service.OrderService;
 import com.kaziamyr.onlinebookstore.service.ShoppingCartService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
-    public OrderDto createOrder(Map<String, String> requestBody) {
+    public OrderDto create(Map<String, String> requestBody) {
         ShoppingCart shoppingCart = shoppingCartService.getOrCreateUsersShoppingCart();
         Order newOrder = new Order();
         newOrder.setUser(shoppingCart.getUser());
@@ -62,19 +65,40 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findAllByUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        List<Order> allOrders = orderRepository.findAllByUser(user);
+        List<Order> allOrders = orderRepository.findAllByUser(getCurrentUser());
         return allOrders.stream()
                 .map(order -> {
                     OrderDto orderDto = orderMapper.toDto(order);
-                    orderDto.setOrderItems(
-                            orderItemRepository.getOrderItemsByOrderId(order.getId()).stream()
-                                    .map(orderItemMapper::toDto)
-                                    .toList());
+                    orderDto.setOrderItems(getOrderItemsByOrder(order));
                     return orderDto;
                 })
                 .toList();
+    }
+
+    @Override
+    public OrderDto updateStatus(Long id, Map<String, String> requestBody) {
+        Order order = orderRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find order by id " + id)
+        );
+        order.setStatus(Order.Status.valueOf(requestBody.get("status")));
+        order.setOrderItems(
+                new HashSet<>(orderItemRepository.getOrderItemsByOrderId(order.getId())));
+        orderRepository.save(order);
+        OrderDto orderDto = orderMapper.toDto(order);
+        orderDto.setOrderItems(getOrderItemsByOrder(order));
+        return orderDto;
+    }
+
+    private List<OrderItemDto> getOrderItemsByOrder(Order order) {
+        return orderItemRepository.getOrderItemsByOrderId(order.getId()).stream()
+                .map(orderItemMapper::toDto)
+                .toList();
+    }
+
+    private static User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        return user;
     }
 
     private BigDecimal getTotalFromShoppingCart(ShoppingCart shoppingCart) {

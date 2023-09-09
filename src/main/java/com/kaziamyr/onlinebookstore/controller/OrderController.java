@@ -2,7 +2,6 @@ package com.kaziamyr.onlinebookstore.controller;
 
 import com.kaziamyr.onlinebookstore.dto.OrderDto;
 import com.kaziamyr.onlinebookstore.dto.OrderItemDto;
-import com.kaziamyr.onlinebookstore.dto.StatusRequestDto;
 import com.kaziamyr.onlinebookstore.service.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -26,19 +25,24 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
-    public OrderDto placeOrder(@RequestBody Map<String, String> requestBody) {
-        return orderService.createOrder(requestBody);
+    public OrderDto place(@RequestBody Map<String, String> requestBody) {
+        return orderService.create(requestBody);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
-    public List<OrderDto> retrieveOrderHistory() {
+    public List<OrderDto> retrieveHistory() {
         return orderService.findAllByUser();
     }
 
-    @PatchMapping
-    public OrderDto updateOrderStatus(StatusRequestDto statusDto) {
-        return null;
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PatchMapping("/{id}")
+    public OrderDto updateStatus(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        return orderService.updateStatus(id, requestBody);
     }
 
     @GetMapping("/{orderId}/items")

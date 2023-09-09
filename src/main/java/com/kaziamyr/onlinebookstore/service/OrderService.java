@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
-    OrderDto createOrder(Map<String, String> requestBody);
+    OrderDto create(Map<String, String> requestBody);
 
     List<OrderDto> findAllByUser();
+
+    OrderDto updateStatus(Long id, Map<String, String> requestBody);
 }
