@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
         return allOrders.stream()
                 .map(order -> {
                     OrderDto orderDto = orderMapper.toDto(order);
-                    orderDto.setOrderItems(getOrderItemsByOrder(order));
+                    orderDto.setOrderItems(getOrderItemDtosByOrder(order));
                     return orderDto;
                 })
                 .toList();
@@ -85,11 +86,32 @@ public class OrderServiceImpl implements OrderService {
                 new HashSet<>(orderItemRepository.getOrderItemsByOrderId(order.getId())));
         orderRepository.save(order);
         OrderDto orderDto = orderMapper.toDto(order);
-        orderDto.setOrderItems(getOrderItemsByOrder(order));
+        orderDto.setOrderItems(getOrderItemDtosByOrder(order));
         return orderDto;
     }
 
-    private List<OrderItemDto> getOrderItemsByOrder(Order order) {
+    @Override
+    public List<OrderItemDto> getOrderItemsByOrderId(Long orderId) {
+        Order order = orderRepository.findByIdAndUser(orderId, getCurrentUser()).orElseThrow(
+                () -> new EntityNotFoundException("You don't have order with id " + orderId)
+        );
+        return getOrderItemDtosByOrder(order);
+    }
+
+    @Override
+    public OrderItemDto getOrderItemByIdAndOrderId(Long itemId, Long orderId) {
+        Order order = orderRepository.findByIdAndUser(orderId, getCurrentUser()).orElseThrow(
+                () -> new EntityNotFoundException("You don't have order with id " + orderId)
+        );
+        List<OrderItemDto> orderItemDtos = getOrderItemDtosByOrder(order);
+        return orderItemDtos.stream()
+                .filter(orderItemDto -> Objects.equals(orderItemDto.getId(), itemId))
+                .findFirst().orElseThrow(
+                        () -> new EntityNotFoundException("You don't have order item with id "
+                                + itemId + " in order with id " + orderId));
+    }
+
+    private List<OrderItemDto> getOrderItemDtosByOrder(Order order) {
         return orderItemRepository.getOrderItemsByOrderId(order.getId()).stream()
                 .map(orderItemMapper::toDto)
                 .toList();
@@ -97,8 +119,7 @@ public class OrderServiceImpl implements OrderService {
 
     private static User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        return user;
+        return (User) authentication.getPrincipal();
     }
 
     private BigDecimal getTotalFromShoppingCart(ShoppingCart shoppingCart) {

@@ -31,12 +31,12 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
-    public List<OrderDto> retrieveHistory() {
+    public List<OrderDto> retrieveUsersHistory() {
         return orderService.findAllByUser();
     }
 
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     public OrderDto updateStatus(
             @PathVariable Long id,
@@ -45,16 +45,18 @@ public class OrderController {
         return orderService.updateStatus(id, requestBody);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items")
     public List<OrderItemDto> retrieveAllOrderItemsByOrderId(@PathVariable Long orderId) {
-        return null;
+        return orderService.getOrderItemsByOrderId(orderId);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items/{itemId}")
-    public OrderItemDto retrieveOrderItemsById(
+    public OrderItemDto retrieveOrderItemById(
             @PathVariable Long orderId,
             @PathVariable Long itemId
     ) {
-        return null;
+        return orderService.getOrderItemByIdAndOrderId(itemId, orderId);
     }
 }
