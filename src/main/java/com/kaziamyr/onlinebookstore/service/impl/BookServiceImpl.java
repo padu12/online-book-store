@@ -32,7 +32,9 @@ public class BookServiceImpl implements BookService {
         Book book = bookMapper.toModel(requestDto);
         book.setCategories(
                 Stream.of(requestDto.getCategoryIds())
-                        .map(categoryRepository::getReferenceById)
+                        .map(id -> categoryRepository.findById(id).orElseThrow(
+                                () -> new EntityNotFoundException("Can't find category "
+                                        + "with id " + id)))
                         .collect(Collectors.toSet())
         );
         return bookMapper.toDto(bookRepository.save(book));
@@ -74,6 +76,7 @@ public class BookServiceImpl implements BookService {
             specification = specification.and(sp);
         }
         return bookRepository.findAll(specification).stream()
+                .map(book -> bookRepository.findBookById(book.getId()).get())
                 .map(bookMapper::toDto)
                 .toList();
     }
