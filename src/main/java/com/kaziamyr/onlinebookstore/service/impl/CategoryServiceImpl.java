@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getById(Long id) {
-        return categoryMapper.toDto(categoryRepository.getCategoryById(id));
+        return categoryMapper.toDto(categoryRepository.getReferenceById(id));
     }
 
     @Override
