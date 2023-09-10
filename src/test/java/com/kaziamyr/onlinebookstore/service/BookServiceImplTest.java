@@ -116,11 +116,14 @@ public class BookServiceImplTest {
 
     @Test
     @DisplayName("Test findAll()")
-    public void findAll_withPageable_shouldReturnList() {
-        List<Book> books = List.of(LISOVA_PISNIA);
-        List<BookDto> expected = List.of(LISOVA_PISNIA_DTO);
+    public void findAll_withoutPageable_shouldReturnList() {
+        List<Book> books = List.of(LISOVA_PISNIA, ZAKHAR_BERKUT);
+        List<BookDto> expected = List.of(LISOVA_PISNIA_DTO, ZAKHAR_BERKUT_DTO);
         when(bookRepository.findAll(Pageable.unpaged())).thenReturn(new PageImpl<>(books));
+        when(bookRepository.findBookById(1L)).thenReturn(Optional.of(LISOVA_PISNIA));
+        when(bookRepository.findBookById(2L)).thenReturn(Optional.of(ZAKHAR_BERKUT));
         when(bookMapper.toDto(LISOVA_PISNIA)).thenReturn(LISOVA_PISNIA_DTO);
+        when(bookMapper.toDto(ZAKHAR_BERKUT)).thenReturn(ZAKHAR_BERKUT_DTO);
 
         List<BookDto> actual = bookServiceImpl.findAll(Pageable.unpaged());
 
