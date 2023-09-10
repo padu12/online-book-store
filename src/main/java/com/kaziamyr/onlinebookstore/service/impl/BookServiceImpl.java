@@ -31,7 +31,7 @@ public class BookServiceImpl implements BookService {
         Book book = bookMapper.toModel(requestDto);
         book.setCategories(
                 Stream.of(requestDto.getCategoryIds())
-                        .map(categoryRepository::getCategoryById)
+                        .map(categoryRepository::getReferenceById)
                         .collect(Collectors.toSet())
         );
         return bookMapper.toDto(bookRepository.save(book));
