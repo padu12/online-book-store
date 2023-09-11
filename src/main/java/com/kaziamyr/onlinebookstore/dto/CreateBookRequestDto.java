@@ -10,10 +10,10 @@ import org.hibernate.validator.constraints.ISBN;
 @Data
 public class CreateBookRequestDto {
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1)
     private String title;
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1)
     private String author;
     @NotNull
     @ISBN

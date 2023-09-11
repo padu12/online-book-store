@@ -9,9 +9,9 @@ import lombok.Data;
 public class UserLoginRequestDto {
     @NotNull
     @Email
-    @Size(min = 1, max = 100)
+    @Size(min = 1)
     private String email;
     @NotNull
-    @Size(min = 8, max = 30)
+    @Size(min = 8)
     private String password;
 }
