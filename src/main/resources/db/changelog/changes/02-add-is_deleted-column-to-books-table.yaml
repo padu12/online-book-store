@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: add-is_deleted-column-to-books-table
-      author: bohdankaziamyr
+      author: bohdan-kaziamyr
       changes:
         - addColumn:
             tableName: books
