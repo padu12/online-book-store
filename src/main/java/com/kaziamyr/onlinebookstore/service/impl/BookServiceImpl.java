@@ -65,7 +65,9 @@ public class BookServiceImpl implements BookService {
 
     private Set<Category> getCategorySet(CreateBookRequestDto requestDto) {
         return Stream.of(requestDto.getCategoryIds())
-                .map(categoryRepository::getReferenceById)
+                .map(id -> categoryRepository.findById(id).orElseThrow(
+                        () -> new EntityNotFoundException("Can't find category with id " + id)
+                ))
                 .collect(Collectors.toSet());
     }
 

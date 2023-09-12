@@ -2,6 +2,7 @@ package com.kaziamyr.onlinebookstore.service.impl;
 
 import com.kaziamyr.onlinebookstore.dto.OrderDto;
 import com.kaziamyr.onlinebookstore.dto.OrderItemDto;
+import com.kaziamyr.onlinebookstore.dto.ShippingAddressDto;
 import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.mapper.CartItemMapper;
 import com.kaziamyr.onlinebookstore.mapper.OrderItemMapper;
@@ -78,11 +79,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto updateStatus(Long id, Map<String, String> requestBody) {
+    public OrderDto updateStatus(Long id, ShippingAddressDto shippingAddressDto) {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find order by id " + id)
         );
-        order.setStatus(Order.Status.valueOf(requestBody.get("status")));
+        order.setStatus(Order.Status.valueOf(shippingAddressDto.getShippingAddress()));
         order.setOrderItems(
                 new HashSet<>(orderItemRepository.getOrderItemsByOrderId(order.getId())));
         orderRepository.save(order);
