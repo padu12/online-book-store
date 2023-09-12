@@ -33,15 +33,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartMapper shoppingCartMapper;
 
     @Override
-    public ShoppingCartDto getShoppingCartByUser() {
+    public ShoppingCartDto getByUser() {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
-        ShoppingCartDto shoppingCartDto = shoppingCartMapper.toDto(shoppingCart);
-        shoppingCartDto.setCartItems(
-                shoppingCart.getCartItems().stream()
-                        .map(cartItemMapper::toCartItemWithBookTitle)
-                        .toList()
-        );
-        return shoppingCartDto;
+        return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
@@ -76,7 +70,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
         List<CartItem> cartItems = new ArrayList<>(shoppingCart.getCartItems());
         CartItem presentCartItem = cartItems.stream()
-                .filter(cartItem1 -> cartItem1.getId().equals(id))
+                .filter(cartItem -> cartItem.getId().equals(id))
                 .findAny().orElseThrow(
                         () -> new EntityNotFoundException("Can't update books count for"
                                 + " cart item with id" + id)

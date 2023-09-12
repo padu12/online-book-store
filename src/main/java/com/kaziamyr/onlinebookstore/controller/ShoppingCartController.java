@@ -29,7 +29,7 @@ public class ShoppingCartController {
     @GetMapping
     @Operation(summary = "Get users shopping cart")
     public ShoppingCartDto getUsersShoppingCart() {
-        return shoppingCartService.getShoppingCartByUser();
+        return shoppingCartService.getByUser();
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

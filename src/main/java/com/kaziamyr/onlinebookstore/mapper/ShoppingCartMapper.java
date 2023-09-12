@@ -7,18 +7,27 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(config = MapperConfig.class)
-public interface ShoppingCartMapper {
+public abstract class ShoppingCartMapper {
+    @Autowired
+    private CartItemMapper cartItemMapper;
+
     @BeforeMapping
-    default void addUserId(
+    public void addUserId(
             @MappingTarget ShoppingCartDto shoppingCartDto, ShoppingCart shoppingCart
     ) {
         if (shoppingCart != null) {
             shoppingCartDto.setUserId(shoppingCart.getUser().getId());
+            shoppingCartDto.setCartItems(
+                    shoppingCart.getCartItems().stream()
+                            .map(cartItemMapper::toCartItemWithBookTitle)
+                            .toList()
+            );
         }
     }
 
     @Mapping(ignore = true, target = "cartItems")
-    ShoppingCartDto toDto(ShoppingCart shoppingCart);
+    public abstract ShoppingCartDto toDto(ShoppingCart shoppingCart);
 }
