@@ -5,6 +5,7 @@ import com.kaziamyr.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.mapper.BookMapper;
 import com.kaziamyr.onlinebookstore.model.Book;
+import com.kaziamyr.onlinebookstore.model.Category;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import com.kaziamyr.onlinebookstore.repository.CategoryRepository;
 import com.kaziamyr.onlinebookstore.service.BookService;
@@ -12,6 +13,7 @@ import com.kaziamyr.onlinebookstore.specification.SpecificationProvider;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +32,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
-        book.setCategories(
-                Stream.of(requestDto.getCategoryIds())
-                        .map(categoryRepository::getReferenceById)
-                        .collect(Collectors.toSet())
-        );
+        book.setCategories(getCategorySet(requestDto));
         return bookMapper.toDto(bookRepository.save(book));
     }
 
@@ -63,6 +61,12 @@ public class BookServiceImpl implements BookService {
         Book updatedBook = bookMapper.toModel(bookDto);
         updatedBook.setId(id);
         return bookMapper.toDto(bookRepository.save(updatedBook));
+    }
+
+    private Set<Category> getCategorySet(CreateBookRequestDto requestDto) {
+        return Stream.of(requestDto.getCategoryIds())
+                .map(categoryRepository::getReferenceById)
+                .collect(Collectors.toSet());
     }
 
     public List<BookDto> getAll(Map<String, String> params) {

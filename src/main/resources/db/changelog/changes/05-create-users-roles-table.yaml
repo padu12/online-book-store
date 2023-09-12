@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: create-users-roles-table
-      author: bohdankaziamyr
+      id: create-users-table
+      author: bohdan-kaziamyr
       changes:
         - createTable:
             tableName: users_roles
