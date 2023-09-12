@@ -8,19 +8,19 @@ import org.springframework.util.StringUtils;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch,
         Object> {
-    private String firstField;
-    private String secondField;
+    private String firstFieldToMatch;
+    private String secondFieldToMatch;
 
     @Override
     public void initialize(FieldMatch constraintAnnotation) {
-        firstField = constraintAnnotation.firstField();
-        secondField = constraintAnnotation.secondField();
+        firstFieldToMatch = constraintAnnotation.firstFieldToMatch();
+        secondFieldToMatch = constraintAnnotation.secondFieldToMatch();
     }
 
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext context) {
-        Object firstFieldValue = getFieldValue(object, firstField);
-        Object secondFieldValue = getFieldValue(object, secondField);
+        Object firstFieldValue = getFieldValue(object, firstFieldToMatch);
+        Object secondFieldValue = getFieldValue(object, secondFieldToMatch);
         return Objects.equals(firstFieldValue, secondFieldValue);
     }
 

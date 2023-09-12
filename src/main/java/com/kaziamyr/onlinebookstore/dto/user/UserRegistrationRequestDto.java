@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-@FieldMatch(firstField = "password", secondField = "repeatPassword")
+@FieldMatch(firstFieldToMatch = "password", secondFieldToMatch = "repeatPassword")
 public class UserRegistrationRequestDto {
     @NotNull
     @Email
@@ -17,6 +17,7 @@ public class UserRegistrationRequestDto {
     @Size(min = 8, max = 30)
     private String password;
     @NotNull
+    @Size(min = 8, max = 30)
     private String repeatPassword;
     @NotNull
     @Size(min = 1, max = 100)

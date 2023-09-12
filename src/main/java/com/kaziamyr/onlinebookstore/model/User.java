@@ -40,7 +40,6 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String lastName;
     private String shoppingAddress;
-    @JoinColumn(nullable = false)
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -56,11 +55,9 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
-
         for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName().toString()));
         }
-
         return authorities;
     }
 
