@@ -6,7 +6,7 @@ import com.kaziamyr.onlinebookstore.dto.cartitem.PutCartItemRequestDto;
 import com.kaziamyr.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
 
 public interface ShoppingCartService {
-    ShoppingCartDto getShoppingCartByUser();
+    ShoppingCartDto getByUser();
 
     CartItemDto addBookToShoppingCart(CreateCartItemRequestDto request);
 
