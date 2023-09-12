@@ -3,7 +3,6 @@ package com.kaziamyr.onlinebookstore.mapper;
 import com.kaziamyr.onlinebookstore.config.MapperConfig;
 import com.kaziamyr.onlinebookstore.dto.user.UserRegistrationRequestDto;
 import com.kaziamyr.onlinebookstore.dto.user.UserRegistrationResponseDto;
-import com.kaziamyr.onlinebookstore.model.Role;
 import com.kaziamyr.onlinebookstore.model.User;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
