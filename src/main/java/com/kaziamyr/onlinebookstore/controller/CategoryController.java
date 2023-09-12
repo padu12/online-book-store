@@ -32,7 +32,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     @Operation(summary = "Create category. Validation is present")
-    public CategoryDto createCategory(@RequestBody @Valid SaveCategoryRequestDto request) {
+    public CategoryDto create(@RequestBody @Valid SaveCategoryRequestDto request) {
         return categoryService.save(request);
     }
 
