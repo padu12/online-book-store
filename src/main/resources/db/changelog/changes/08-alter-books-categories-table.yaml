@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: alter-books-categories-table
+      author: bohdan-kaziamyr
+      changes:
+        - dropColumn:
+            tableName: books_categories
+            columnName: book_id
+        - addColumn:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false

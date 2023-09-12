@@ -1,4 +1,4 @@
-package com.kaziamyr.onlinebookstore.dto;
+package com.kaziamyr.onlinebookstore.dto.user;
 
 import com.kaziamyr.onlinebookstore.validation.FieldMatch;
 import jakarta.validation.constraints.Email;

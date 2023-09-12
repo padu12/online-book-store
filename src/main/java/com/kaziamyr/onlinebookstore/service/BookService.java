@@ -1,7 +1,7 @@
 package com.kaziamyr.onlinebookstore.service;
 
-import com.kaziamyr.onlinebookstore.dto.BookDto;
-import com.kaziamyr.onlinebookstore.dto.CreateBookRequestDto;
+import com.kaziamyr.onlinebookstore.dto.book.BookDto;
+import com.kaziamyr.onlinebookstore.dto.book.CreateBookRequestDto;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Pageable;

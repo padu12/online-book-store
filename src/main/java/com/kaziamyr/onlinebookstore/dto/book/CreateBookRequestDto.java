@@ -1,4 +1,4 @@
-package com.kaziamyr.onlinebookstore.dto;
+package com.kaziamyr.onlinebookstore.dto.book;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +18,7 @@ public class CreateBookRequestDto {
     @NotNull
     @ISBN
     private String isbn;
+    private Long[] categoryIds;
     @NotNull
     @Min(0)
     private BigDecimal price;
