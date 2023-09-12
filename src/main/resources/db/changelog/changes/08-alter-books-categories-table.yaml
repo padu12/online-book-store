@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: alter-books-categories-table
-      author: bohdankaziamyr
+      author: bohdan-kaziamyr
       changes:
         - dropColumn:
             tableName: books_categories
