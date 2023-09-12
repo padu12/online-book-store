@@ -11,7 +11,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MapperConfig.class)
 public interface OrderMapper {
     @BeforeMapping
-    default void addUserId(
+    default void addUserIdAndOrderItems(
             @MappingTarget OrderDto orderDto, Order order
     ) {
         if (order != null) {
