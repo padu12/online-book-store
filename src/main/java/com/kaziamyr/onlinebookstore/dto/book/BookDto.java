@@ -11,7 +11,7 @@ public class BookDto {
     private Long id;
     private String title;
     private String author;
-    private List<String> categories;
+    private List<Long> categories;
     private String isbn;
     private BigDecimal price;
     private String description;

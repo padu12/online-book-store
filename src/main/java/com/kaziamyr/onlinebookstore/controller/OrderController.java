@@ -2,11 +2,11 @@ package com.kaziamyr.onlinebookstore.controller;
 
 import com.kaziamyr.onlinebookstore.dto.OrderDto;
 import com.kaziamyr.onlinebookstore.dto.OrderItemDto;
+import com.kaziamyr.onlinebookstore.dto.ShippingAddressDto;
 import com.kaziamyr.onlinebookstore.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,8 +28,8 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
     @Operation(summary = "Place user's order according items in shopping cart")
-    public OrderDto place(@RequestBody Map<String, String> requestBody) {
-        return orderService.create(requestBody);
+    public OrderDto place(@RequestBody ShippingAddressDto shippingAddressDto) {
+        return orderService.create(shippingAddressDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -44,22 +44,22 @@ public class OrderController {
     @Operation(summary = "Update status of order by its id")
     public OrderDto updateStatus(
             @PathVariable Long id,
-            @RequestBody Map<String, String> requestBody
+            @RequestBody ShippingAddressDto shippingAddressDto
     ) {
-        return orderService.updateStatus(id, requestBody);
+        return orderService.updateStatus(id, shippingAddressDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items")
     @Operation(summary = "Retrieve all order items from a specific order")
-    public List<OrderItemDto> retrieveAllOrderItemsByOrderId(@PathVariable Long orderId) {
+    public List<OrderItemDto> getAllByOrderId(@PathVariable Long orderId) {
         return orderService.getOrderItemsByOrderId(orderId);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items/{itemId}")
     @Operation(summary = "Retrieve a specific item from a specific order")
-    public OrderItemDto retrieveOrderItemById(
+    public OrderItemDto getByIdAndItemId(
             @PathVariable Long orderId,
             @PathVariable Long itemId
     ) {

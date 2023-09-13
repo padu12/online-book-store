@@ -14,9 +14,9 @@ import org.mapstruct.Mapper;
 public interface BookMapper {
     BookDto toDto(Book book);
 
-    default List<String> map(Set<Category> value) {
+    default List<Long> map(Set<Category> value) {
         return value.stream()
-                .map(Category::getName)
+                .map(Category::getId)
                 .toList();
     }
 

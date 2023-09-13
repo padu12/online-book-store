@@ -7,7 +7,7 @@ import com.kaziamyr.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
 import com.kaziamyr.onlinebookstore.model.ShoppingCart;
 
 public interface ShoppingCartService {
-    ShoppingCartDto getShoppingCartByUser();
+    ShoppingCartDto getByUser();
 
     CartItemDto addBookToShoppingCart(CreateCartItemRequestDto request);
 

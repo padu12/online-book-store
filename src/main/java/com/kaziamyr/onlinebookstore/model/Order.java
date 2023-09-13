@@ -17,6 +17,8 @@ import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -30,7 +32,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "user_id")
     private User user;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -42,6 +44,7 @@ public class Order {
     @Column(nullable = false)
     private String shippingAddress;
     @OneToMany(mappedBy = "order")
+    @Cascade(CascadeType.PERSIST)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<OrderItem> orderItems;

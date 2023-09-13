@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldMatch {
-    String firstField();
+    String firstFieldToMatch();
 
-    String secondField();
+    String secondFieldToMatch();
 
     String message() default "Fields aren't the same!";
 

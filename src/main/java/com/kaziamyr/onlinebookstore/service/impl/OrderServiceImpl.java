@@ -2,6 +2,7 @@ package com.kaziamyr.onlinebookstore.service.impl;
 
 import com.kaziamyr.onlinebookstore.dto.OrderDto;
 import com.kaziamyr.onlinebookstore.dto.OrderItemDto;
+import com.kaziamyr.onlinebookstore.dto.ShippingAddressDto;
 import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.mapper.CartItemMapper;
 import com.kaziamyr.onlinebookstore.mapper.OrderItemMapper;
@@ -10,23 +11,20 @@ import com.kaziamyr.onlinebookstore.model.CartItem;
 import com.kaziamyr.onlinebookstore.model.Order;
 import com.kaziamyr.onlinebookstore.model.OrderItem;
 import com.kaziamyr.onlinebookstore.model.ShoppingCart;
-import com.kaziamyr.onlinebookstore.model.User;
 import com.kaziamyr.onlinebookstore.repository.OrderItemRepository;
 import com.kaziamyr.onlinebookstore.repository.OrderRepository;
 import com.kaziamyr.onlinebookstore.service.OrderService;
 import com.kaziamyr.onlinebookstore.service.ShoppingCartService;
+import com.kaziamyr.onlinebookstore.service.UserService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -38,36 +36,40 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
+    private final UserService userService;
 
     @Override
-    public OrderDto create(Map<String, String> requestBody) {
+    public OrderDto create(ShippingAddressDto shippingAddressDto) {
         ShoppingCart shoppingCart = shoppingCartService.getOrCreateUsersShoppingCart();
         Order newOrder = new Order();
         newOrder.setUser(shoppingCart.getUser());
         newOrder.setStatus(Order.Status.PENDING);
         newOrder.setTotal(getTotalFromShoppingCart(shoppingCart));
         newOrder.setOrderDate(LocalDateTime.now());
-        newOrder.setShippingAddress(requestBody.get("shippingAddress"));
-        Set<OrderItem> orderItemSet = shoppingCart.getCartItems().stream()
-                .map(cartItem -> {
-                    OrderItem orderItem = cartItemMapper.toOrderItem(cartItem);
-                    orderItem.setOrder(newOrder);
-                    return orderItem;
-                })
-                .collect(Collectors.toSet());
+        newOrder.setShippingAddress(shippingAddressDto.getShippingAddress());
+        Set<OrderItem> orderItemSet = getOrderItemSet(shoppingCart, newOrder);
         newOrder.setOrderItems(orderItemSet);
-        orderRepository.save(newOrder);
-        orderItemRepository.saveAll(orderItemSet);
-        OrderDto orderDto = orderMapper.toDto(newOrder);
+        OrderDto orderDto = orderMapper.toDto(orderRepository.save(newOrder));
         orderDto.setOrderItems(orderItemSet.stream()
                 .map(orderItemMapper::toDto)
                 .toList());
         return orderDto;
     }
 
+    private Set<OrderItem> getOrderItemSet(ShoppingCart shoppingCart, Order newOrder) {
+        return shoppingCart.getCartItems().stream()
+                .map(cartItem -> {
+                    OrderItem orderItem = cartItemMapper.toOrderItem(cartItem);
+                    orderItem.setOrder(newOrder);
+                    return orderItem;
+                })
+                .collect(Collectors.toSet());
+    }
+
     @Override
     public List<OrderDto> findAllByUser(Pageable pageable) {
-        List<Order> allOrders = orderRepository.findAllByUser(pageable, getCurrentUser());
+        List<Order> allOrders =
+                orderRepository.findAllByUser(pageable, userService.getCurrentUser());
         return allOrders.stream()
                 .map(order -> {
                     OrderDto orderDto = orderMapper.toDto(order);
@@ -78,11 +80,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto updateStatus(Long id, Map<String, String> requestBody) {
+    public OrderDto updateStatus(Long id, ShippingAddressDto shippingAddressDto) {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find order by id " + id)
         );
-        order.setStatus(Order.Status.valueOf(requestBody.get("status")));
+        order.setStatus(Order.Status.valueOf(shippingAddressDto.getShippingAddress()));
         order.setOrderItems(
                 new HashSet<>(orderItemRepository.getOrderItemsByOrderId(order.getId())));
         orderRepository.save(order);
@@ -93,17 +95,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderItemDto> getOrderItemsByOrderId(Long orderId) {
-        Order order = orderRepository.findByIdAndUser(orderId, getCurrentUser()).orElseThrow(
-                () -> new EntityNotFoundException("You don't have order with id " + orderId)
-        );
+        Order order = orderRepository.findByIdAndUser(orderId, userService.getCurrentUser())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("You don't have order with id " + orderId)
+                );
         return getOrderItemDtosByOrder(order);
     }
 
     @Override
     public OrderItemDto getOrderItemByIdAndOrderId(Long itemId, Long orderId) {
-        Order order = orderRepository.findByIdAndUser(orderId, getCurrentUser()).orElseThrow(
-                () -> new EntityNotFoundException("You don't have order with id " + orderId)
-        );
+        Order order = orderRepository.findByIdAndUser(orderId, userService.getCurrentUser())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("You don't have order with id " + orderId)
+                );
         List<OrderItemDto> orderItemDtos = getOrderItemDtosByOrder(order);
         return orderItemDtos.stream()
                 .filter(orderItemDto -> Objects.equals(orderItemDto.getId(), itemId))
@@ -116,11 +120,6 @@ public class OrderServiceImpl implements OrderService {
         return orderItemRepository.getOrderItemsByOrderId(order.getId()).stream()
                 .map(orderItemMapper::toDto)
                 .toList();
-    }
-
-    private static User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (User) authentication.getPrincipal();
     }
 
     private BigDecimal getTotalFromShoppingCart(ShoppingCart shoppingCart) {
