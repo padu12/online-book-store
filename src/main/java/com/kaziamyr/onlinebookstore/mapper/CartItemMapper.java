@@ -20,13 +20,9 @@ public interface CartItemMapper {
             @MappingTarget CartItemWithBookTitleDto cartItemWithBookTitleDto, CartItem cartItem
     ) {
         Book book = cartItem.getBook();
-        if (book != null) {
-            if (book.getId() != null) {
-                cartItemWithBookTitleDto.setBookId(book.getId());
-            }
-            if (book.getTitle() != null) {
-                cartItemWithBookTitleDto.setBookTitle(book.getTitle());
-            }
+        if (book != null && book.getId() != null && book.getTitle() != null) {
+            cartItemWithBookTitleDto.setBookId(book.getId());
+            cartItemWithBookTitleDto.setBookTitle(book.getTitle());
         }
     }
 

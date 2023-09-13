@@ -10,6 +10,8 @@ import com.kaziamyr.onlinebookstore.repository.UserRepository;
 import com.kaziamyr.onlinebookstore.service.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -28,5 +30,11 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(userMapper.toModel(request));
         savedUser.setRoles(Set.of(new Role(1L, Role.RoleName.ROLE_USER)));
         return userMapper.toUserResponseDto(savedUser);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (User) authentication.getPrincipal();
     }
 }
