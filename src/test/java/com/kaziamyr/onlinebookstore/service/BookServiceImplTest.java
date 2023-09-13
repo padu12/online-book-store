@@ -57,7 +57,7 @@ public class BookServiceImplTest {
             .setId(1L)
             .setTitle("Lisova Pisnia")
             .setAuthor("Lesia Ukrainka")
-            .setCategories(List.of("Fantasy"))
+            .setCategories(List.of(1L))
             .setIsbn("9787816949778")
             .setPrice(new BigDecimal("13.50"))
             .setDescription("It's a cool book")
@@ -79,7 +79,7 @@ public class BookServiceImplTest {
             .setPrice(new BigDecimal("19.99"))
             .setDescription("It's a cool book")
             .setCoverImage("https://www.image.com")
-            .setCategories(List.of("Fantasy"));
+            .setCategories(List.of(1L));
 
     @Mock
     private BookRepository bookRepository;
