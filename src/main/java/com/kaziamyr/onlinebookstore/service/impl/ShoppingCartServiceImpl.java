@@ -41,7 +41,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public CartItemDto addBookToShoppingCart(CreateCartItemRequestDto request) {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
-        List<CartItem> cartItems = new ArrayList<>(shoppingCart.getCartItems());
+        List<CartItem> cartItems = getCartItems(shoppingCart);
         CartItem cartItem;
         Optional<CartItem> optionalPresentCartItem = cartItems.stream()
                 .filter(cartItem1 -> cartItem1.getBook().getId().equals(request.getBookId()))
@@ -65,10 +65,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartItemMapper.toCartItemDto(cartItem);
     }
 
+    private static ArrayList<CartItem> getCartItems(ShoppingCart shoppingCart) {
+        if (shoppingCart.getCartItems().isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return new ArrayList<>(shoppingCart.getCartItems());
+        }
+    }
+
     @Override
     public CartItemDto updateBookInShoppingCart(Long id, PutCartItemRequestDto request) {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
-        List<CartItem> cartItems = new ArrayList<>(shoppingCart.getCartItems());
+        List<CartItem> cartItems = getCartItems(shoppingCart);
         CartItem presentCartItem = cartItems.stream()
                 .filter(cartItem -> cartItem.getId().equals(id))
                 .findAny().orElseThrow(

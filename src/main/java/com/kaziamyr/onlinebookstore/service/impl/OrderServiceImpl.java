@@ -49,7 +49,8 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setShippingAddress(shippingAddressDto.getShippingAddress());
         Set<OrderItem> orderItemSet = getOrderItemSet(shoppingCart, newOrder);
         newOrder.setOrderItems(orderItemSet);
-        OrderDto orderDto = orderMapper.toDto(orderRepository.save(newOrder));
+        orderRepository.save(newOrder);
+        OrderDto orderDto = orderMapper.toDto(newOrder);
         orderDto.setOrderItems(orderItemSet.stream()
                 .map(orderItemMapper::toDto)
                 .toList());
