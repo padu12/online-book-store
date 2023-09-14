@@ -40,6 +40,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto create(ShippingAddressDto shippingAddressDto) {
+        Order newOrder = createNewOrder(shippingAddressDto);
+        return getOrderDto(newOrder);
+    }
+
+    private Order createNewOrder(ShippingAddressDto shippingAddressDto) {
         ShoppingCart shoppingCart = shoppingCartService.getOrCreateUsersShoppingCart();
         Order newOrder = new Order();
         newOrder.setUser(shoppingCart.getUser());
@@ -50,11 +55,7 @@ public class OrderServiceImpl implements OrderService {
         Set<OrderItem> orderItemSet = getOrderItemSet(shoppingCart, newOrder);
         newOrder.setOrderItems(orderItemSet);
         orderRepository.save(newOrder);
-        OrderDto orderDto = orderMapper.toDto(newOrder);
-        orderDto.setOrderItems(orderItemSet.stream()
-                .map(orderItemMapper::toDto)
-                .toList());
-        return orderDto;
+        return newOrder;
     }
 
     private Set<OrderItem> getOrderItemSet(ShoppingCart shoppingCart, Order newOrder) {
@@ -72,11 +73,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> allOrders =
                 orderRepository.findAllByUser(pageable, userService.getCurrentUser());
         return allOrders.stream()
-                .map(order -> {
-                    OrderDto orderDto = orderMapper.toDto(order);
-                    orderDto.setOrderItems(getOrderItemDtosByOrder(order));
-                    return orderDto;
-                })
+                .map(this::getOrderDto)
                 .toList();
     }
 
@@ -89,6 +86,10 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderItems(
                 new HashSet<>(orderItemRepository.getOrderItemsByOrderId(order.getId())));
         orderRepository.save(order);
+        return getOrderDto(order);
+    }
+
+    private OrderDto getOrderDto(Order order) {
         OrderDto orderDto = orderMapper.toDto(order);
         orderDto.setOrderItems(getOrderItemDtosByOrder(order));
         return orderDto;
