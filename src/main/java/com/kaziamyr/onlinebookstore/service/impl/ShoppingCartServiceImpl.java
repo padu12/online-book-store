@@ -113,7 +113,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCart;
     }
 
-    private static CartItem addQuantity(CreateCartItemRequestDto request, Optional<CartItem> optionalPresentCartItem, List<CartItem> cartItems) {
+    private static CartItem addQuantity(
+            CreateCartItemRequestDto request,
+            Optional<CartItem> optionalPresentCartItem,
+            List<CartItem> cartItems
+    ) {
         CartItem cartItem;
         cartItem = optionalPresentCartItem.get();
         cartItem.setQuantity(cartItem.getQuantity() + request.getQuantity());
@@ -121,7 +125,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartItem;
     }
 
-    private CartItem addNewBook(CreateCartItemRequestDto request, ShoppingCart shoppingCart, List<CartItem> cartItems) {
+    private CartItem addNewBook(
+            CreateCartItemRequestDto request,
+            ShoppingCart shoppingCart,
+            List<CartItem> cartItems
+    ) {
         CartItem cartItem;
         cartItem = cartItemMapper.toModel(request);
         cartItem.setShoppingCart(shoppingCart);
