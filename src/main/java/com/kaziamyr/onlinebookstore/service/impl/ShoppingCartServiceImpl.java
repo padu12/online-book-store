@@ -41,7 +41,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public CartItemDto addBook(CreateCartItemRequestDto request) {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
-        List<CartItem> cartItems = new ArrayList<>(shoppingCart.getCartItems());
+        List<CartItem> cartItems = getCartItems(shoppingCart);
         CartItem cartItem;
         Optional<CartItem> optionalPresentCartItem = cartItems.stream()
                 .filter(cartItemFromShoppingCart ->
@@ -55,6 +55,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.setCartItems(new HashSet<>(cartItems));
         shoppingCartRepository.save(shoppingCart);
         return cartItemMapper.toCartItemDto(cartItem);
+    }
+
+    private static ArrayList<CartItem> getCartItems(ShoppingCart shoppingCart) {
+        if (shoppingCart.getCartItems().isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return new ArrayList<>(shoppingCart.getCartItems());
+        }
     }
 
     @Override
@@ -83,7 +91,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItemRepository.deleteById(id);
     }
 
-    private ShoppingCart getOrCreateUsersShoppingCart() {
+    public ShoppingCart getOrCreateUsersShoppingCart() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Optional<ShoppingCart> shoppingCartOptional =
