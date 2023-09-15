@@ -116,7 +116,7 @@ public class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test findAll()")
+    @DisplayName("Test findAll() without pagination")
     public void findAll_withoutPageable_shouldReturnList() {
         List<Book> books = List.of(LISOVA_PISNIA, ZAKHAR_BERKUT);
         when(bookRepository.findAll(Pageable.unpaged())).thenReturn(new PageImpl<>(books));
@@ -132,7 +132,7 @@ public class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test save()")
+    @DisplayName("Test save() with a valid book entity")
     public void save_validBook_shouldReturnBookDto() {
         when(bookMapper.toModel(any())).thenReturn(LISOVA_PISNIA);
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(CATEGORY));
@@ -145,13 +145,13 @@ public class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test deleteById()")
+    @DisplayName("Test deleteById() with a correct id")
     public void delete_validId_returnNothing() {
         assertDoesNotThrow(() -> bookServiceImpl.deleteById(LISOVA_PISNIA.getId()));
     }
 
     @Test
-    @DisplayName("Test updateById()")
+    @DisplayName("Test updateById() with a valid id")
     public void updateById_validId_returnBookDto() {
         when(bookMapper.toModel(any())).thenReturn(LISOVA_PISNIA);
         when(bookRepository.save(any())).thenReturn(LISOVA_PISNIA);

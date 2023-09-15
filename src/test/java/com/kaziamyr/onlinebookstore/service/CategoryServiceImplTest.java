@@ -50,7 +50,7 @@ public class CategoryServiceImplTest {
     private CategoryServiceImpl categoryServiceImpl;
 
     @Test
-    @DisplayName("Test findAll()")
+    @DisplayName("Test findAll() without pagination")
     public void findAll_unpaged_returnListOfCategoryDtos() {
         when(categoryRepository.findAll(Pageable.unpaged()))
                 .thenReturn(new PageImpl<>(List.of(FANTASY)));
@@ -62,7 +62,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test findAllBooksByCategoryId()")
+    @DisplayName("Test findAllBooksByCategoryId() with a valid id")
     public void findAllBooksByCategoryId_validId_returnBookDtosWithoutCategoryIds() {
         Book book = new Book()
                 .setId(2L)
@@ -91,7 +91,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test getById()")
+    @DisplayName("Test getById() with a valid id")
     public void getById_validId_returnCategoryDto() {
         when(categoryRepository.getReferenceById(anyLong())).thenReturn(FANTASY);
         when(categoryMapper.toDto(any())).thenReturn(FANTASY_DTO);
@@ -102,7 +102,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test save()")
+    @DisplayName("Test save() with a correct request")
     public void save_validRequest_returnCategoryDto() {
         SaveCategoryRequestDto saveCategoryRequestDto = new SaveCategoryRequestDto()
                 .setName("Fantasy");
@@ -116,7 +116,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test update()")
+    @DisplayName("Test update() with valid id and request")
     public void update_validIdAndRequest_returnCategoryDto() {
         SaveCategoryRequestDto updateCategoryRequestDto = new SaveCategoryRequestDto()
                 .setName("Fiction");
@@ -136,7 +136,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test delteById")
+    @DisplayName("Test deleteById with correct id")
     public void deleteById_validId_returnNothing() {
         assertDoesNotThrow(() -> categoryServiceImpl.deleteById(FANTASY.getId()));
     }

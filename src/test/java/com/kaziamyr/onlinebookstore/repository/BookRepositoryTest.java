@@ -36,7 +36,7 @@ class BookRepositoryTest {
     private BookRepository bookRepository;
 
     @Test
-    @DisplayName("Test findBookById()")
+    @DisplayName("Test findBookById() with a valid id")
     @Sql(scripts = {
             "classpath:database/categories/add-fiction-to-categories-table.sql",
             "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
@@ -53,7 +53,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("Test findBookById()")
+    @DisplayName("Test findBookById() with two books expected")
     @Sql(scripts = {
             "classpath:database/categories/add-fiction-to-categories-table.sql",
             "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
