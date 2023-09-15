@@ -51,6 +51,13 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return getSimpleObjectResponseEntity(ex.getMessage());
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(
+            EntityNotFoundException ex
+    ) {
+        return getSimpleObjectResponseEntity(ex.getMessage());
+    }
+
     private ResponseEntity<Object> getSimpleObjectResponseEntity(String message) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

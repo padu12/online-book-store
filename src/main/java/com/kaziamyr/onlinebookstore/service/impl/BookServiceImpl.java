@@ -2,6 +2,7 @@ package com.kaziamyr.onlinebookstore.service.impl;
 
 import com.kaziamyr.onlinebookstore.dto.book.BookDto;
 import com.kaziamyr.onlinebookstore.dto.book.CreateBookRequestDto;
+import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.mapper.BookMapper;
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.model.Category;
@@ -38,13 +39,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable).stream()
+                .map(book -> bookRepository.findBookById(book.getId()).get())
                 .map(bookMapper::toDto)
                 .toList();
     }
 
     @Override
     public BookDto getBookById(Long id) {
-        return bookMapper.toDto(bookRepository.getBookById(id));
+        Book book = bookRepository.findBookById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find book with id " + id));
+        return bookMapper.toDto(book);
     }
 
     @Override
