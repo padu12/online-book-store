@@ -39,7 +39,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public CartItemDto addBookToShoppingCart(CreateCartItemRequestDto request) {
+    public CartItemDto addBook(CreateCartItemRequestDto request) {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
         List<CartItem> cartItems = getCartItems(shoppingCart);
         CartItem cartItem;
@@ -66,7 +66,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public CartItemDto updateBookInShoppingCart(Long id, PutCartItemRequestDto request) {
+    public CartItemDto updateBook(Long id, PutCartItemRequestDto request) {
         ShoppingCart shoppingCart = getOrCreateUsersShoppingCart();
         List<CartItem> cartItems = new ArrayList<>(shoppingCart.getCartItems());
         CartItem presentCartItem = findCardItemById(id, cartItems);
@@ -87,7 +87,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteBookFromShoppingCartById(Long id) {
+    public void deleteBookById(Long id) {
         cartItemRepository.deleteById(id);
     }
 

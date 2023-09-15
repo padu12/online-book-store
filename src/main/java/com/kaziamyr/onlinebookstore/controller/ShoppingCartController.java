@@ -37,7 +37,7 @@ public class ShoppingCartController {
     @Operation(summary = "Add books to the shopping cart",
             description = "If there are the same books program will add quantity")
     public CartItemDto addBookToShoppingCart(@RequestBody CreateCartItemRequestDto request) {
-        return shoppingCartService.addBookToShoppingCart(request);
+        return shoppingCartService.addBook(request);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -45,13 +45,13 @@ public class ShoppingCartController {
     @Operation(summary = "Update quantity of books in the shopping cart")
     public CartItemDto updateBooksInShoppingCart(@PathVariable Long id,
                                                  @RequestBody PutCartItemRequestDto request) {
-        return shoppingCartService.updateBookInShoppingCart(id, request);
+        return shoppingCartService.updateBook(id, request);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/cart-items/{id}")
     @Operation(summary = "Delete books from teh shopping cart")
     public void deleteBookFromShoppingCart(@PathVariable Long id) {
-        shoppingCartService.deleteBookFromShoppingCartById(id);
+        shoppingCartService.deleteBookById(id);
     }
 }
