@@ -8,9 +8,9 @@ import com.kaziamyr.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
 public interface ShoppingCartService {
     ShoppingCartDto getByUser();
 
-    CartItemDto addBookToShoppingCart(CreateCartItemRequestDto request);
+    CartItemDto addBook(CreateCartItemRequestDto request);
 
-    CartItemDto updateBookInShoppingCart(Long id, PutCartItemRequestDto request);
+    CartItemDto updateBook(Long id, PutCartItemRequestDto request);
 
-    void deleteBookFromShoppingCartById(Long id);
+    void deleteBookById(Long id);
 }
