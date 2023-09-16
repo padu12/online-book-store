@@ -136,7 +136,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test deleteById with correct id")
+    @DisplayName("Test deleteById with a correct id")
     public void deleteById_validId_returnNothing() {
         assertDoesNotThrow(() -> categoryServiceImpl.deleteById(FANTASY.getId()));
     }

@@ -71,7 +71,7 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/search")
     @Operation(summary = "Get book by any fields")
-    public List<BookDto> searchBooks(@RequestParam Map<String, String> params) {
+    public List<BookDto> search(@RequestParam Map<String, String> params) {
         return bookService.getAll(params);
     }
 
