@@ -32,7 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CategoryControllerTest {
     private static final int VALID_FANTASY_ID = 2;
-    private static final int INVALID_FANTASY_ID = 10;
+    private static final int INVALID_CATEGORY_ID = 10;
     protected static MockMvc mockMvc;
     private static final CategoryDto FANTASY_DTO = new CategoryDto()
             .setId(2L)
@@ -163,7 +163,7 @@ class CategoryControllerTest {
     )
     @DisplayName("Test getCategoryById() with an invalid id")
     void getCategoryById_invalidId_throwException() throws Exception {
-        mockMvc.perform(get("/categories/" + INVALID_FANTASY_ID))
+        mockMvc.perform(get("/categories/" + INVALID_CATEGORY_ID))
                 .andExpect(status().isConflict());
     }
 
@@ -208,7 +208,7 @@ class CategoryControllerTest {
     )
     @DisplayName("Test update() with invalid id and request dto")
     void update_invalidIdAndRequestDto_throwException() throws Exception {
-        mockMvc.perform(put("/categories/" + INVALID_FANTASY_ID)
+        mockMvc.perform(put("/categories/" + INVALID_CATEGORY_ID)
                         .content(objectMapper.writeValueAsString(INVALID_FANTASY_REQUEST_DTO))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -286,7 +286,7 @@ class CategoryControllerTest {
     @Test
     @DisplayName("Test getBooksByCategoryId() with an invalid category id")
     void getBooksByCategoryId_invalidId_throwException() throws Exception {
-        mockMvc.perform(get("/categories/" + INVALID_FANTASY_ID + "/books"))
+        mockMvc.perform(get("/categories/" + INVALID_CATEGORY_ID + "/books"))
                 .andExpect(status().isConflict());
     }
 }
