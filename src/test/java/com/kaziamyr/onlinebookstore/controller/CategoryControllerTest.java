@@ -31,6 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CategoryControllerTest {
+    protected static MockMvc mockMvc;
     private static final CategoryDto FANTASY_DTO = new CategoryDto()
             .setId(2L)
             .setName("Fantasy")
@@ -38,7 +39,6 @@ class CategoryControllerTest {
     private static final SaveCategoryRequestDto FANTASY_REQUEST_DTO = new SaveCategoryRequestDto()
             .setName("Fantasy")
             .setDescription("Fantasy books");
-    protected static MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
 

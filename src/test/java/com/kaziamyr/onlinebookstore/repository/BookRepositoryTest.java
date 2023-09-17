@@ -43,8 +43,8 @@ class BookRepositoryTest {
                     + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/"
-            + "delete-all-from-categories-books-books_categories-tables.sql"
-            , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+            + "delete-all-from-categories-books-books_categories-tables.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findBookById_validId_returnOptionalOfBook() {
         Book actual = bookRepository.findBookById(ZAKHAR_BERKUT_ID).get();
 
@@ -63,8 +63,8 @@ class BookRepositoryTest {
                     + "/add-lesia-ukrainka-fiction-relation-to-books_categories-table.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/"
-            + "delete-all-from-categories-books-books_categories-tables.sql"
-            , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+            + "delete-all-from-categories-books-books_categories-tables.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllByCategoryId_validId_returnListOfBooks() {
         Book lisovaPisnia = new Book()
                 .setId(2L)
@@ -79,7 +79,6 @@ class BookRepositoryTest {
                         .setName("Fiction")
                         .setDescription("Fiction books")));
         List<Book> expected = List.of(ZAKHAR_BERKUT, lisovaPisnia);
-
 
         List<Book> actual = bookRepository.findAllByCategoryId(FICTION_ID);
 
