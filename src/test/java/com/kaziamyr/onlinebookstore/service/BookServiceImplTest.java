@@ -111,7 +111,7 @@ public class BookServiceImplTest {
         when(bookRepository.findBookById(anyLong())).thenReturn(Optional.empty());
 
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
-                        () -> bookServiceImpl.getBookById(INVALID_BOOK_ID));
+                () -> bookServiceImpl.getBookById(INVALID_BOOK_ID));
 
         assertEquals("Can't find book with id " + INVALID_BOOK_ID, actual.getMessage());
     }

@@ -31,9 +31,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BookControllerTest {
+    protected static MockMvc mockMvc;
     private static final int VALID_BOOK_ID = 1;
     private static final int INVALID_BOOK_ID = 15;
-    protected static MockMvc mockMvc;
     private static final BookDto ZAKHAR_BERKUT_DTO = new BookDto()
             .setId(1L)
             .setTitle("Zakhar Berkut")

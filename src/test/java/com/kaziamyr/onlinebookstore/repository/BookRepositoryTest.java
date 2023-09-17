@@ -38,12 +38,13 @@ class BookRepositoryTest {
 
     @Test
     @DisplayName("Test findBookById() with a valid id")
-    @Sql(scripts = {
-            "classpath:database/categories/add-fiction-to-categories-table.sql",
-            "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
-            "classpath:database/books_categories"
-                    + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(
+            scripts = {
+                    "classpath:database/categories/add-fiction-to-categories-table.sql",
+                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
+                    "classpath:database/books_categories"
+                            + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
+            }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/"
             + "delete-all-from-categories-books-books_categories-tables.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -55,12 +56,13 @@ class BookRepositoryTest {
 
     @Test
     @DisplayName("Test findBookById() with an invalid id")
-    @Sql(scripts = {
-            "classpath:database/categories/add-fiction-to-categories-table.sql",
-            "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
-            "classpath:database/books_categories"
-                    + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(
+            scripts = {
+                    "classpath:database/categories/add-fiction-to-categories-table.sql",
+                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
+                    "classpath:database/books_categories"
+                            + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
+            }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/"
             + "delete-all-from-categories-books-books_categories-tables.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -70,14 +72,15 @@ class BookRepositoryTest {
 
     @Test
     @DisplayName("Test findBookById() with two books expected")
-    @Sql(scripts = {
-            "classpath:database/categories/add-fiction-to-categories-table.sql",
-            "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
-            "classpath:database/books_categories"
-                    + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql",
-            "classpath:database/books/add-lisova-pisnia-to-books-table.sql",
-            "classpath:database/books_categories"
-                    + "/add-lesia-ukrainka-fiction-relation-to-books_categories-table.sql"
+    @Sql(
+            scripts = {
+                    "classpath:database/categories/add-fiction-to-categories-table.sql",
+                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
+                    "classpath:database/books_categories"
+                            + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql",
+                    "classpath:database/books/add-lisova-pisnia-to-books-table.sql",
+                    "classpath:database/books_categories"
+                            + "/add-lesia-ukrainka-fiction-relation-to-books_categories-table.sql"
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "classpath:database/"
             + "delete-all-from-categories-books-books_categories-tables.sql",

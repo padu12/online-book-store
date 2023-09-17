@@ -20,6 +20,7 @@ import com.kaziamyr.onlinebookstore.service.impl.CategoryServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ public class CategoryServiceImplTest {
     @Test
     @DisplayName("Test getById() with a valid id")
     public void getById_validId_returnCategoryDto() {
-        when(categoryRepository.getReferenceById(anyLong())).thenReturn(FANTASY);
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(FANTASY));
         when(categoryMapper.toDto(any())).thenReturn(FANTASY_DTO);
 
         CategoryDto actual = categoryServiceImpl.getById(FANTASY_DTO.getId());
@@ -107,7 +108,7 @@ public class CategoryServiceImplTest {
     @Test
     @DisplayName("Test getById() with an invalid id")
     public void getById_invalidId_throwException() {
-        when(categoryRepository.getReferenceById(anyLong())).thenThrow(
+        when(categoryRepository.findById(anyLong())).thenThrow(
                 new EntityNotFoundException());
 
         assertThrows(EntityNotFoundException.class,

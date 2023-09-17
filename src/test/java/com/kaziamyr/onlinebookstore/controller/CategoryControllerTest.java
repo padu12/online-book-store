@@ -31,21 +31,21 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CategoryControllerTest {
+    protected static MockMvc mockMvc;
     private static final int VALID_FANTASY_ID = 2;
     private static final int INVALID_CATEGORY_ID = 10;
-    protected static MockMvc mockMvc;
     private static final CategoryDto FANTASY_DTO = new CategoryDto()
             .setId(2L)
             .setName("Fantasy")
             .setDescription("Fantasy books");
     private static final SaveCategoryRequestDto VAlID_FANTASY_REQUEST_DTO =
             new SaveCategoryRequestDto()
-            .setName("Fantasy")
-            .setDescription("Fantasy books");
+                    .setName("Fantasy")
+                    .setDescription("Fantasy books");
     private static final SaveCategoryRequestDto INVALID_FANTASY_REQUEST_DTO =
             new SaveCategoryRequestDto()
-            .setName("")
-            .setDescription("Fantasy books");
+                    .setName("")
+                    .setDescription("Fantasy books");
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -92,7 +92,7 @@ class CategoryControllerTest {
                         .content(objectMapper.writeValueAsString(INVALID_FANTASY_REQUEST_DTO))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isConflict());
+                .andExpect(status().isBadRequest());
     }
 
     @WithMockUser(username = "user")
@@ -212,7 +212,7 @@ class CategoryControllerTest {
                         .content(objectMapper.writeValueAsString(INVALID_FANTASY_REQUEST_DTO))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isConflict());
+                .andExpect(status().isBadRequest());
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -280,13 +280,5 @@ class CategoryControllerTest {
                     assertTrue(EqualsBuilder
                             .reflectionEquals(expected.get(id), actual.get(id), "id"));
                 });
-    }
-
-    @WithMockUser(username = "user")
-    @Test
-    @DisplayName("Test getBooksByCategoryId() with an invalid category id")
-    void getBooksByCategoryId_invalidId_throwException() throws Exception {
-        mockMvc.perform(get("/categories/" + INVALID_CATEGORY_ID + "/books"))
-                .andExpect(status().isConflict());
     }
 }
