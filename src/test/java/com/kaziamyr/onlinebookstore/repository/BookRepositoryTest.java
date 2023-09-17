@@ -31,7 +31,6 @@ class BookRepositoryTest {
                     .setId(1L)
                     .setName("Fiction")
                     .setDescription("Fiction books")));
-    ;
     @Autowired
     private BookRepository bookRepository;
 
