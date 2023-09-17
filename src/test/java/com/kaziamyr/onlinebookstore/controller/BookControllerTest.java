@@ -31,6 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BookControllerTest {
+    protected static MockMvc mockMvc;
     private static final BookDto ZAKHAR_BERKUT_DTO = new BookDto()
             .setId(1L)
             .setTitle("Zakhar Berkut")
@@ -49,7 +50,6 @@ class BookControllerTest {
             .setDescription("description")
             .setCoverImage("https://example.com/updated-cover-image.jpg")
             .setCategories(List.of(1L));
-    protected static MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -122,8 +122,8 @@ class BookControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @Sql(
-            scripts = "classpath:database/categories/add-fiction-to-categories-table.sql"
-            , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+            scripts = "classpath:database/categories/add-fiction-to-categories-table.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
             scripts = "classpath:database/"
