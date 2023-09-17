@@ -124,7 +124,7 @@ class BookControllerTest {
     @WithMockUser(username = "user")
     @Test
     @DisplayName("Test getById with an invalid id")
-    void getById_invalidId_returnBookDto() throws Exception {
+    void getById_invalidId_throwException() throws Exception {
         mockMvc.perform(get("/books/" + INVALID_BOOK_ID))
                 .andExpect(status().isConflict());
     }
@@ -175,7 +175,7 @@ class BookControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test create() with an invalid book")
-    void create_withInvalidBook_returnBookDto() throws Exception {
+    void create_withInvalidBook_throwException() throws Exception {
         CreateBookRequestDto invalidZakharBerkutRequest = new CreateBookRequestDto()
                 .setTitle("Zakhar Berkut")
                 .setAuthor("Ivan Franko")
@@ -266,7 +266,7 @@ class BookControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test update() with incorrect id and request dto")
-    void update_invalidIdAndRequestDto_returnBookDto() throws Exception {
+    void update_invalidIdAndRequestDto_throwException() throws Exception {
         CreateBookRequestDto invalidLisovaPisniaRequest = new CreateBookRequestDto()
                 .setTitle("Lisova Pisnia")
                 .setAuthor("Lesia Ukrainka")
