@@ -1,7 +1,8 @@
-package com.kaziamyr.onlinebookstore.service.impl;
+package com.kaziamyr.onlinebookstore.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -15,8 +16,11 @@ import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.model.Category;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import com.kaziamyr.onlinebookstore.repository.CategoryRepository;
+import com.kaziamyr.onlinebookstore.service.impl.CategoryServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +39,7 @@ public class CategoryServiceImplTest {
     private static final CategoryDto FANTASY_DTO = new CategoryDto()
             .setId(1L)
             .setName("Fantasy");
+    private static final Long INVALID_CATEGORY_ID = 16L;
 
     @Mock
     private BookRepository bookRepository;
@@ -92,12 +97,22 @@ public class CategoryServiceImplTest {
     @Test
     @DisplayName("Test getById() with a valid id")
     public void getById_validId_returnCategoryDto() {
-        when(categoryRepository.getReferenceById(anyLong())).thenReturn(FANTASY);
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(FANTASY));
         when(categoryMapper.toDto(any())).thenReturn(FANTASY_DTO);
 
         CategoryDto actual = categoryServiceImpl.getById(FANTASY_DTO.getId());
 
         assertEquals(FANTASY_DTO, actual);
+    }
+
+    @Test
+    @DisplayName("Test getById() with an invalid id")
+    public void getById_invalidId_throwException() {
+        when(categoryRepository.findById(anyLong())).thenThrow(
+                new EntityNotFoundException());
+
+        assertThrows(EntityNotFoundException.class,
+                () -> categoryServiceImpl.getById(INVALID_CATEGORY_ID));
     }
 
     @Test

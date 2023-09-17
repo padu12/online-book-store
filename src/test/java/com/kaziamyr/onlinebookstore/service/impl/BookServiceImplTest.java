@@ -1,4 +1,4 @@
-package com.kaziamyr.onlinebookstore.service.impl;
+package com.kaziamyr.onlinebookstore.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +15,7 @@ import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.model.Category;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import com.kaziamyr.onlinebookstore.repository.CategoryRepository;
-import com.kaziamyr.onlinebookstore.specification.SpecificationProvider;
+import com.kaziamyr.onlinebookstore.service.impl.BookServiceImpl;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -79,6 +79,7 @@ public class BookServiceImplTest {
             .setDescription("It's a cool book")
             .setCoverImage("https://www.image.com")
             .setCategories(List.of(1L));
+    private static final Long INVALID_BOOK_ID = 16L;
 
     @Mock
     private BookRepository bookRepository;
@@ -86,8 +87,6 @@ public class BookServiceImplTest {
     private CategoryRepository categoryRepository;
     @Mock
     private BookMapper bookMapper;
-    @Mock
-    private SpecificationProvider<Book> specificationProvider;
 
     @InjectMocks
     private BookServiceImpl bookServiceImpl;
@@ -108,10 +107,10 @@ public class BookServiceImplTest {
     public void getBookById_withNotValidId_throwException() {
         when(bookRepository.findBookById(anyLong())).thenReturn(Optional.empty());
 
-        EntityNotFoundException actual =
-                assertThrows(EntityNotFoundException.class, () -> bookServiceImpl.getBookById(16L));
+        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
+                () -> bookServiceImpl.getBookById(INVALID_BOOK_ID));
 
-        assertEquals("Can't find book with id 16", actual.getMessage());
+        assertEquals("Can't find book with id " + INVALID_BOOK_ID, actual.getMessage());
     }
 
     @Test
@@ -144,6 +143,24 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Test save() with an invalid book entity")
+    public void save_invalidBook_throwException() {
+        CreateBookRequestDto createInvalidLisovaPisnia =
+                new CreateBookRequestDto()
+                        .setTitle("Lisova Pisnia")
+                        .setAuthor("Lesia Ukrainka")
+                        .setIsbn("978781694977871")
+                        .setPrice(new BigDecimal("13.50"))
+                        .setDescription("It's a cool book")
+                        .setCoverImage("https://www.image.com")
+                        .setCategoryIds(new Long[]{1L});
+        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
+                () -> bookServiceImpl.save(createInvalidLisovaPisnia));
+
+        assertEquals("Can't find category with id 1", actual.getMessage());
+    }
+
+    @Test
     @DisplayName("Test deleteById() with a correct id")
     public void delete_validId_returnNothing() {
         assertDoesNotThrow(() -> bookServiceImpl.deleteById(LISOVA_PISNIA.getId()));
@@ -160,5 +177,4 @@ public class BookServiceImplTest {
 
         assertEquals(LISOVA_PISNIA_DTO, actual);
     }
-
 }
