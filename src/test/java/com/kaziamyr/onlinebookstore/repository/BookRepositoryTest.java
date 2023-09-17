@@ -1,6 +1,7 @@
 package com.kaziamyr.onlinebookstore.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.kaziamyr.onlinebookstore.model.Book;
 import com.kaziamyr.onlinebookstore.model.Category;
@@ -31,6 +32,7 @@ class BookRepositoryTest {
                     .setId(1L)
                     .setName("Fiction")
                     .setDescription("Fiction books")));
+    private static final Long INVALID_BOOK_ID = 10L;
     @Autowired
     private BookRepository bookRepository;
 
@@ -50,6 +52,22 @@ class BookRepositoryTest {
         Book actual = bookRepository.findBookById(ZAKHAR_BERKUT_ID).get();
 
         assertEquals(ZAKHAR_BERKUT, actual);
+    }
+
+    @Test
+    @DisplayName("Test findBookById() with an invalid id")
+    @Sql(
+            scripts = {
+                    "classpath:database/categories/add-fiction-to-categories-table.sql",
+                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
+                    "classpath:database/books_categories"
+                            + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
+            }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:database/"
+            + "delete-all-from-categories-books-books_categories-tables.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void findBookById_invalidId_returnEmptyOptional() {
+        assertTrue(bookRepository.findBookById(INVALID_BOOK_ID).isEmpty());
     }
 
     @Test
