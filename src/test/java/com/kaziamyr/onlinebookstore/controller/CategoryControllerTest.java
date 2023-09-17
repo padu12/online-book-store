@@ -121,10 +121,8 @@ class CategoryControllerTest {
                 .readValue(mvcResult.getResponse().getContentAsString(), CategoryDto[].class));
 
         IntStream.range(0, expected.size())
-                .forEach(id -> {
-                    assertTrue(EqualsBuilder
-                            .reflectionEquals(expected.get(id), actual.get(id), "id"));
-                });
+                .forEach(id -> assertTrue(EqualsBuilder
+                        .reflectionEquals(expected.get(id), actual.get(id), "id")));
     }
 
     @WithMockUser(username = "user")
@@ -276,9 +274,7 @@ class CategoryControllerTest {
                 mvcResult.getResponse().getContentAsString(), BookDtoWithoutCategoryIds[].class));
 
         IntStream.range(0, expected.size())
-                .forEach(id -> {
-                    assertTrue(EqualsBuilder
-                            .reflectionEquals(expected.get(id), actual.get(id), "id"));
-                });
+                .forEach(id -> assertTrue(EqualsBuilder
+                        .reflectionEquals(expected.get(id), actual.get(id), "id")));
     }
 }

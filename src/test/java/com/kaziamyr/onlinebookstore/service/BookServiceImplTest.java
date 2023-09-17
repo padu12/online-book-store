@@ -16,7 +16,6 @@ import com.kaziamyr.onlinebookstore.model.Category;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import com.kaziamyr.onlinebookstore.repository.CategoryRepository;
 import com.kaziamyr.onlinebookstore.service.impl.BookServiceImpl;
-import com.kaziamyr.onlinebookstore.specification.SpecificationProvider;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -88,8 +87,6 @@ public class BookServiceImplTest {
     private CategoryRepository categoryRepository;
     @Mock
     private BookMapper bookMapper;
-    @Mock
-    private SpecificationProvider<Book> specificationProvider;
 
     @InjectMocks
     private BookServiceImpl bookServiceImpl;
