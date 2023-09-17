@@ -145,6 +145,24 @@ public class BookServiceImplTest {
     }
 
     @Test
+    @DisplayName("Test save() with an invalid book entity")
+    public void save_invalidBook_throwException() {
+        CreateBookRequestDto createInvalidLisovaPisnia =
+                new CreateBookRequestDto()
+                        .setTitle("Lisova Pisnia")
+                        .setAuthor("Lesia Ukrainka")
+                        .setIsbn("978781694977871")
+                        .setPrice(new BigDecimal("13.50"))
+                        .setDescription("It's a cool book")
+                        .setCoverImage("https://www.image.com")
+                        .setCategoryIds(new Long[]{1L});
+        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
+                () -> bookServiceImpl.save(createInvalidLisovaPisnia));
+
+        assertEquals("Can't find category with id 1", actual.getMessage());
+    }
+
+    @Test
     @DisplayName("Test deleteById() with a correct id")
     public void delete_validId_returnNothing() {
         assertDoesNotThrow(() -> bookServiceImpl.deleteById(LISOVA_PISNIA.getId()));
@@ -161,5 +179,4 @@ public class BookServiceImplTest {
 
         assertEquals(LISOVA_PISNIA_DTO, actual);
     }
-
 }
