@@ -31,6 +31,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BookControllerTest {
+    private static final int VALID_BOOK_ID = 1;
+    private static final int INVALID_BOOK_ID = 15;
     protected static MockMvc mockMvc;
     private static final BookDto ZAKHAR_BERKUT_DTO = new BookDto()
             .setId(1L)
@@ -111,12 +113,20 @@ class BookControllerTest {
     )
     @DisplayName("Test getById with a correct id")
     void getById_validId_returnBookDto() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/books/1")).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/books/" + VALID_BOOK_ID)).andReturn();
 
         BookDto actual =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BookDto.class);
 
         assertTrue(EqualsBuilder.reflectionEquals(ZAKHAR_BERKUT_DTO, actual, "id"));
+    }
+
+    @WithMockUser(username = "user")
+    @Test
+    @DisplayName("Test getById with an invalid id")
+    void getById_invalidId_returnBookDto() throws Exception {
+        mockMvc.perform(get("/books/" + INVALID_BOOK_ID))
+                .andExpect(status().isConflict());
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -130,7 +140,7 @@ class BookControllerTest {
                     + "delete-all-from-categories-books-books_categories-tables.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
-    @DisplayName("Test create() without pagination")
+    @DisplayName("Test create() with a correct book")
     void create_withValidBook_returnBookDto() throws Exception {
         CreateBookRequestDto zakharBerkutRequest = new CreateBookRequestDto()
                 .setTitle("Zakhar Berkut")
@@ -151,6 +161,34 @@ class BookControllerTest {
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BookDto.class);
 
         assertTrue(EqualsBuilder.reflectionEquals(ZAKHAR_BERKUT_DTO, actual, "id"));
+    }
+
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @Test
+    @Sql(
+            scripts = "classpath:database/categories/add-fiction-to-categories-table.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/"
+                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
+    @DisplayName("Test create() with an invalid book")
+    void create_withInvalidBook_returnBookDto() throws Exception {
+        CreateBookRequestDto invalidZakharBerkutRequest = new CreateBookRequestDto()
+                .setTitle("Zakhar Berkut")
+                .setAuthor("Ivan Franko")
+                .setIsbn("97883391238674")
+                .setPrice(BigDecimal.valueOf(10))
+                .setDescription("description")
+                .setCoverImage("https://example.com/updated-cover-image.jpg")
+                .setCategoryIds(new Long[]{1L});
+        mockMvc.perform(post("/books")
+                        .content(objectMapper.writeValueAsString(invalidZakharBerkutRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest());
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -189,7 +227,7 @@ class BookControllerTest {
                     + "delete-all-from-categories-books-books_categories-tables.sql",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
-    @DisplayName("test update() with correct id and request dto")
+    @DisplayName("Test update() with correct id and request dto")
     void update_validIdAndRequestDto_returnBookDto() throws Exception {
         CreateBookRequestDto lisovaPisniaRequest = new CreateBookRequestDto()
                 .setTitle("Lisova Pisnia")
@@ -199,7 +237,7 @@ class BookControllerTest {
                 .setDescription("description")
                 .setCoverImage("https://example.com/updated-cover-image.jpg")
                 .setCategoryIds(new Long[]{1L});
-        MvcResult mvcResult = mockMvc.perform(put("/books/1")
+        MvcResult mvcResult = mockMvc.perform(put("/books/" + VALID_BOOK_ID)
                         .content(objectMapper.writeValueAsString(lisovaPisniaRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -210,6 +248,38 @@ class BookControllerTest {
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BookDto.class);
 
         assertTrue(EqualsBuilder.reflectionEquals(LISOVA_PISNIA_DTO, actual, "id"));
+    }
+
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @Test
+    @Sql(
+            scripts = {
+                    "classpath:database/categories/add-fiction-to-categories-table.sql",
+                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
+                    "classpath:database/books_categories/"
+                            + "add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
+            }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/"
+                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
+    @DisplayName("Test update() with incorrect id and request dto")
+    void update_invalidIdAndRequestDto_returnBookDto() throws Exception {
+        CreateBookRequestDto invalidLisovaPisniaRequest = new CreateBookRequestDto()
+                .setTitle("Lisova Pisnia")
+                .setAuthor("Lesia Ukrainka")
+                .setIsbn("97837697365266")
+                .setPrice(BigDecimal.valueOf(12))
+                .setDescription("description")
+                .setCoverImage("https://example.com/updated-cover-image.jpg")
+                .setCategoryIds(new Long[]{1L});
+        mockMvc.perform(put("/books/" + INVALID_BOOK_ID)
+                        .content(objectMapper.writeValueAsString(invalidLisovaPisniaRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest());
     }
 
     @WithMockUser(username = "user")
