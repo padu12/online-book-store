@@ -2,6 +2,7 @@ package com.kaziamyr.onlinebookstore.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -16,6 +17,7 @@ import com.kaziamyr.onlinebookstore.model.Category;
 import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import com.kaziamyr.onlinebookstore.repository.CategoryRepository;
 import com.kaziamyr.onlinebookstore.service.impl.CategoryServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +38,7 @@ public class CategoryServiceImplTest {
     private static final CategoryDto FANTASY_DTO = new CategoryDto()
             .setId(1L)
             .setName("Fantasy");
+    private static final Long INVALID_CATEGORY_ID = 16L;
 
     @Mock
     private BookRepository bookRepository;
@@ -99,6 +102,16 @@ public class CategoryServiceImplTest {
         CategoryDto actual = categoryServiceImpl.getById(FANTASY_DTO.getId());
 
         assertEquals(FANTASY_DTO, actual);
+    }
+
+    @Test
+    @DisplayName("Test getById() with an invalid id")
+    public void getById_invalidId_throwException() {
+        when(categoryRepository.getReferenceById(anyLong())).thenThrow(
+                new EntityNotFoundException());
+
+        assertThrows(EntityNotFoundException.class,
+                () -> categoryServiceImpl.getById(INVALID_CATEGORY_ID));
     }
 
     @Test

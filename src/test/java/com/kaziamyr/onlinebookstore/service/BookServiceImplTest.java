@@ -80,6 +80,7 @@ public class BookServiceImplTest {
             .setDescription("It's a cool book")
             .setCoverImage("https://www.image.com")
             .setCategories(List.of(1L));
+    private static final Long INVALID_BOOK_ID = 16L;
 
     @Mock
     private BookRepository bookRepository;
@@ -109,10 +110,10 @@ public class BookServiceImplTest {
     public void getBookById_withNotValidId_throwException() {
         when(bookRepository.findBookById(anyLong())).thenReturn(Optional.empty());
 
-        EntityNotFoundException actual =
-                assertThrows(EntityNotFoundException.class, () -> bookServiceImpl.getBookById(16L));
+        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
+                        () -> bookServiceImpl.getBookById(INVALID_BOOK_ID));
 
-        assertEquals("Can't find book with id 16", actual.getMessage());
+        assertEquals("Can't find book with id " + INVALID_BOOK_ID, actual.getMessage());
     }
 
     @Test
