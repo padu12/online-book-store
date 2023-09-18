@@ -28,7 +28,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
 
 @ExtendWith(MockitoExtension.class)
 class ShoppingCartServiceImplTest {
@@ -106,8 +105,7 @@ class ShoppingCartServiceImplTest {
     @Mock
     private ShoppingCartMapper shoppingCartMapper;
     @Mock
-    private Authentication authentication;
-
+    private UserServiceImpl userService;
     @InjectMocks
     private ShoppingCartServiceImpl shoppingCartServiceImpl;
 
@@ -120,9 +118,9 @@ class ShoppingCartServiceImplTest {
     @Test
     @DisplayName("Test getByUser() with a valid user")
     void getByUser_validUser_returnShoppingCartDto() {
+        when(userService.getCurrentUser()).thenReturn(USER);
         when(shoppingCartRepository.findShoppingCartByUser(any())).thenReturn(
                 Optional.of(VALID_SHOPPING_CART));
-        when(authentication.getPrincipal()).thenReturn(USER);
         when(cartItemRepository.findAllByShoppingCart(any())).thenReturn(
                 List.of(ZAKHAR_BERKUT_CART_ITEM, LISOVA_PISNIA_CART_ITEM));
         when(shoppingCartMapper.toDto(any())).thenReturn(VALID_SHOPPING_CART_DTO);
