@@ -1,9 +1,14 @@
 package com.kaziamyr.onlinebookstore.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.kaziamyr.onlinebookstore.dto.cartitem.CartItemDto;
 import com.kaziamyr.onlinebookstore.dto.cartitem.CartItemWithBookTitleDto;
+import com.kaziamyr.onlinebookstore.dto.cartitem.CreateCartItemRequestDto;
+import com.kaziamyr.onlinebookstore.dto.cartitem.PutCartItemRequestDto;
 import com.kaziamyr.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
 import com.kaziamyr.onlinebookstore.mapper.CartItemMapper;
 import com.kaziamyr.onlinebookstore.mapper.ShoppingCartMapper;
@@ -20,7 +25,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,13 +81,13 @@ class ShoppingCartServiceImplTest {
             .setId(1L)
             .setUser(USER)
             .setCartItems(Set.of(ZAKHAR_BERKUT_CART_ITEM, LISOVA_PISNIA_CART_ITEM));
-    private static final CartItemWithBookTitleDto ZAKHAR_BERKUT_CART_ITEM_DTO =
+    private static final CartItemWithBookTitleDto ZAKHAR_BERKUT_CART_ITEM_WITH_TITLE_DTO =
             new CartItemWithBookTitleDto()
                     .setId(1L)
                     .setBookId(1L)
                     .setBookTitle("Zakhar Berkut")
                     .setQuantity(5);
-    private static final CartItemWithBookTitleDto LISOVA_PISNIA_CART_ITEM_DTO =
+    private static final CartItemWithBookTitleDto LISOVA_PISNIA_CART_ITEM_WITH_TITLE_DTO =
             new CartItemWithBookTitleDto()
                     .setId(2L)
                     .setBookId(2L)
@@ -92,7 +96,13 @@ class ShoppingCartServiceImplTest {
     private static final ShoppingCartDto VALID_SHOPPING_CART_DTO = new ShoppingCartDto()
             .setId(1L)
             .setUserId(1L)
-            .setCartItems(List.of(ZAKHAR_BERKUT_CART_ITEM_DTO, LISOVA_PISNIA_CART_ITEM_DTO));
+            .setCartItems(List.of(ZAKHAR_BERKUT_CART_ITEM_WITH_TITLE_DTO,
+                    LISOVA_PISNIA_CART_ITEM_WITH_TITLE_DTO));
+    private static final CartItemDto ZAKHAR_BERKUT_CART_ITEM_DTO = new CartItemDto()
+            .setId(1L)
+            .setBookId(1L)
+            .setQuantity(5);
+    private static final Long VALID_BOOK_ID = 1L;
 
     @Mock
     private ShoppingCartRepository shoppingCartRepository;
@@ -118,31 +128,67 @@ class ShoppingCartServiceImplTest {
     @Test
     @DisplayName("Test getByUser() with a valid user")
     void getByUser_validUser_returnShoppingCartDto() {
+        mockGetShoppingCartData();
+        when(shoppingCartMapper.toDto(any())).thenReturn(VALID_SHOPPING_CART_DTO);
+
+        ShoppingCartDto actual = shoppingCartServiceImpl.getByUser();
+
+        assertEquals(VALID_SHOPPING_CART_DTO, actual);
+    }
+
+    @Test
+    @DisplayName("Test addBookToShoppingCart() with a valid request book")
+    void addBookToShoppingCart_validBook_returnCartItemDto() {
+        CreateCartItemRequestDto cartItemRequestDto = new CreateCartItemRequestDto()
+                .setBookId(1L)
+                .setQuantity(5);
+        mockGetShoppingCartData();
+        when(shoppingCartRepository.save(any())).thenReturn(null);
+        when(cartItemMapper.toCartItemDto(any())).thenReturn(ZAKHAR_BERKUT_CART_ITEM_DTO);
+
+        CartItemDto actual = shoppingCartServiceImpl.addBookToShoppingCart(cartItemRequestDto);
+
+        assertEquals(ZAKHAR_BERKUT_CART_ITEM_DTO, actual);
+    }
+
+    @Test
+    @DisplayName("Test updateBookInShoppingCart with a valid id")
+    void updateBookInShoppingCart_validId_returnCartItemDto() {
+        PutCartItemRequestDto putCartItemRequestDto = new PutCartItemRequestDto();
+        putCartItemRequestDto.setQuantity(5);
+        mockGetShoppingCartData();
+        when(shoppingCartRepository.save(any())).thenReturn(null);
+        when(cartItemMapper.toCartItemDto(any())).thenReturn(ZAKHAR_BERKUT_CART_ITEM_DTO);
+
+        CartItemDto actual = shoppingCartServiceImpl.updateBookInShoppingCart(
+                VALID_BOOK_ID, putCartItemRequestDto
+        );
+
+        assertEquals(ZAKHAR_BERKUT_CART_ITEM_DTO, actual);
+    }
+
+    @Test
+    @DisplayName("Test deleteBookFromShoppingCartById with a valid id")
+    void deleteBookFromShoppingCartById_validId_returnNothing() {
+        assertDoesNotThrow(
+                () -> shoppingCartServiceImpl.deleteBookFromShoppingCartById(VALID_BOOK_ID)
+        );
+    }
+
+    @Test
+    void getOrCreateUsersShoppingCart() {
+        mockGetShoppingCartData();
+
+        ShoppingCart actual = shoppingCartServiceImpl.getOrCreateUsersShoppingCart();
+
+        assertEquals(VALID_SHOPPING_CART, actual);
+    }
+
+    private void mockGetShoppingCartData() {
         when(userService.getCurrentUser()).thenReturn(USER);
         when(shoppingCartRepository.findShoppingCartByUser(any())).thenReturn(
                 Optional.of(VALID_SHOPPING_CART));
         when(cartItemRepository.findAllByShoppingCart(any())).thenReturn(
                 List.of(ZAKHAR_BERKUT_CART_ITEM, LISOVA_PISNIA_CART_ITEM));
-        when(shoppingCartMapper.toDto(any())).thenReturn(VALID_SHOPPING_CART_DTO);
-
-        ShoppingCartDto actual = shoppingCartServiceImpl.getByUser();
-
-        Assertions.assertEquals(VALID_SHOPPING_CART_DTO, actual);
-    }
-
-    @Test
-    void addBookToShoppingCart() {
-    }
-
-    @Test
-    void updateBookInShoppingCart() {
-    }
-
-    @Test
-    void deleteBookFromShoppingCartById() {
-    }
-
-    @Test
-    void getOrCreateUsersShoppingCart() {
     }
 }
