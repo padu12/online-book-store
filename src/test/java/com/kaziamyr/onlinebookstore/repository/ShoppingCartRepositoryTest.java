@@ -21,7 +21,6 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ShoppingCartRepositoryTest {
-
     private static final Role ROLE_USER = new Role()
             .setId(1L)
             .setRoleName(Role.RoleName.ROLE_USER);

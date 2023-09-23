@@ -2,6 +2,7 @@ package com.kaziamyr.onlinebookstore.service.impl;
 
 import com.kaziamyr.onlinebookstore.dto.user.UserRegistrationRequestDto;
 import com.kaziamyr.onlinebookstore.dto.user.UserRegistrationResponseDto;
+import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.exception.RegistrationException;
 import com.kaziamyr.onlinebookstore.mapper.UserMapper;
 import com.kaziamyr.onlinebookstore.model.Role;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (User) authentication.getPrincipal();
+        return userRepository.findByEmail(authentication.getName()).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user with email "
+                        + authentication.getName())
+        );
     }
 }
