@@ -132,7 +132,7 @@ class ShoppingCartControllerTest {
     @Sql(
             scripts = {
                     "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/add-shopping-cart-to-shopping_carts-table.sql"
+                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
@@ -157,7 +157,8 @@ class ShoppingCartControllerTest {
     @Sql(
             scripts = {
                     "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/add-empty-shopping-cart-to-shopping_carts_table.sql"
+                    "classpath:database/shoppingcart/"
+                            + "add-empty-shopping-cart-to-shopping_carts_table.sql"
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
@@ -190,7 +191,8 @@ class ShoppingCartControllerTest {
     @Sql(
             scripts = {
                     "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/add-empty-shopping-cart-to-shopping_carts_table.sql"
+                    "classpath:database/shoppingcart/"
+                            + "add-empty-shopping-cart-to-shopping_carts_table.sql"
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
@@ -215,7 +217,7 @@ class ShoppingCartControllerTest {
     @Sql(
             scripts = {
                     "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/add-shopping-cart-to-shopping_carts-table.sql"
+                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
@@ -249,7 +251,7 @@ class ShoppingCartControllerTest {
     @Sql(
             scripts = {
                     "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/add-shopping-cart-to-shopping_carts-table.sql"
+                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
@@ -271,7 +273,7 @@ class ShoppingCartControllerTest {
     @Sql(
             scripts = {
                     "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/add-shopping-cart-to-shopping_carts-table.sql"
+                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )

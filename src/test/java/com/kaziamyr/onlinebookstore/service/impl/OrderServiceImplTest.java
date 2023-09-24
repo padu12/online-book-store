@@ -39,7 +39,6 @@ import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
-
     private static final Role ROLE_USER = new Role()
             .setId(1L)
             .setRoleName(Role.RoleName.ROLE_USER);

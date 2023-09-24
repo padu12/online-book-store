@@ -74,7 +74,7 @@ class ShoppingCartRepositoryTest {
     @Sql(
             scripts = {
                     "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/add-shopping-cart-to-shopping_carts-table.sql"
+                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
