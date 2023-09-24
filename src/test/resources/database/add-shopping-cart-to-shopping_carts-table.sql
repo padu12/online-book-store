@@ -15,7 +15,8 @@ INSERT INTO books (id, title, author, isbn, price, description, cover_image, is_
 VALUES (2, 'Lisova Pisnia', 'Lesia Ukrainka', '9787816949778', 12, 'Its a cool book',
         'https://www.image.com', false);
 
-INSERT INTO books_categories (category_id, book_id) VALUES (1, 2);
+INSERT INTO books_categories (category_id, book_id)
+VALUES (1, 2);
 
 INSERT INTO users (id, email, password, first_name, last_name, shopping_address, is_deleted)
 VALUES (1, 'user@example.com', 'your_password', 'John', 'Doe', '123 Main Street', false);

@@ -3,6 +3,7 @@ package com.kaziamyr.onlinebookstore.controller;
 import com.kaziamyr.onlinebookstore.dto.OrderDto;
 import com.kaziamyr.onlinebookstore.dto.OrderItemDto;
 import com.kaziamyr.onlinebookstore.dto.ShippingAddressDto;
+import com.kaziamyr.onlinebookstore.dto.StatusRequestDto;
 import com.kaziamyr.onlinebookstore.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,9 +45,9 @@ public class OrderController {
     @Operation(summary = "Update status of order by its id")
     public OrderDto updateStatus(
             @PathVariable Long id,
-            @RequestBody ShippingAddressDto shippingAddressDto
+            @RequestBody StatusRequestDto statusRequestDto
     ) {
-        return orderService.updateStatus(id, shippingAddressDto);
+        return orderService.updateStatus(id, statusRequestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")

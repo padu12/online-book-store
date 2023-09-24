@@ -40,10 +40,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ShoppingCartControllerTest {
+    protected static MockMvc mockMvc;
     private static final Long VALID_CART_ITEM_ID = 2L;
     private static final Long INVALID_CART_ITEM_ID = 10L;
     private static final Long VALID_BOOK_ID = 1L;
-    protected static MockMvc mockMvc;
     private static final Role ROLE_USER = new Role()
             .setId(1L)
             .setRoleName(Role.RoleName.ROLE_USER);
@@ -111,7 +111,7 @@ class ShoppingCartControllerTest {
             .setId(1L)
             .setBookId(1L)
             .setQuantity(5);
-    public static final PutCartItemRequestDto PUT_CART_ITEM_REQUEST_DTO =
+    private static final PutCartItemRequestDto PUT_CART_ITEM_REQUEST_DTO =
             new PutCartItemRequestDto().setQuantity(15);
     @Autowired
     private ObjectMapper objectMapper;
@@ -145,8 +145,8 @@ class ShoppingCartControllerTest {
         MvcResult mvcResult = mockMvc.perform(get("/cart")).andReturn();
 
         ShoppingCartDto actual = objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(),
-                        ShoppingCartDto.class
+                mvcResult.getResponse().getContentAsString(),
+                ShoppingCartDto.class
         );
 
         assertTrue(EqualsBuilder.reflectionEquals(VALID_SHOPPING_CART_DTO, actual, "id"));
