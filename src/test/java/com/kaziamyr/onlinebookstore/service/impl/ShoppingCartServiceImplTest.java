@@ -114,7 +114,7 @@ class ShoppingCartServiceImplTest {
     @Mock
     private UserServiceImpl userService;
     @InjectMocks
-    private ShoppingCartServiceImpl shoppingCartServiceImpl;
+    private ShoppingCartServiceImpl shoppingCartService;
 
     @BeforeAll
     static void beforeAll() {
@@ -128,7 +128,7 @@ class ShoppingCartServiceImplTest {
         mockGetShoppingCartData();
         when(shoppingCartMapper.toDto(any())).thenReturn(VALID_SHOPPING_CART_DTO);
 
-        ShoppingCartDto actual = shoppingCartServiceImpl.getByUser();
+        ShoppingCartDto actual = shoppingCartService.getByUser();
 
         assertEquals(VALID_SHOPPING_CART_DTO, actual);
     }
@@ -143,7 +143,7 @@ class ShoppingCartServiceImplTest {
         when(shoppingCartRepository.save(any())).thenReturn(null);
         when(cartItemMapper.toCartItemDto(any())).thenReturn(ZAKHAR_BERKUT_CART_ITEM_DTO);
 
-        CartItemDto actual = shoppingCartServiceImpl.addBookToShoppingCart(cartItemRequestDto);
+        CartItemDto actual = shoppingCartService.addBookToShoppingCart(cartItemRequestDto);
 
         assertEquals(ZAKHAR_BERKUT_CART_ITEM_DTO, actual);
     }
@@ -157,7 +157,7 @@ class ShoppingCartServiceImplTest {
         when(shoppingCartRepository.save(any())).thenReturn(null);
         when(cartItemMapper.toCartItemDto(any())).thenReturn(ZAKHAR_BERKUT_CART_ITEM_DTO);
 
-        CartItemDto actual = shoppingCartServiceImpl.updateBookInShoppingCart(
+        CartItemDto actual = shoppingCartService.updateBookInShoppingCart(
                 VALID_BOOK_ID, putCartItemRequestDto
         );
 
@@ -168,7 +168,7 @@ class ShoppingCartServiceImplTest {
     @DisplayName("Test deleteBookFromShoppingCartById with a valid id")
     void deleteBookFromShoppingCartById_validId_returnNothing() {
         assertDoesNotThrow(
-                () -> shoppingCartServiceImpl.deleteBookFromShoppingCartById(VALID_BOOK_ID)
+                () -> shoppingCartService.deleteBookFromShoppingCartById(VALID_BOOK_ID)
         );
     }
 
@@ -176,7 +176,7 @@ class ShoppingCartServiceImplTest {
     void getOrCreateUsersShoppingCart() {
         mockGetShoppingCartData();
 
-        ShoppingCart actual = shoppingCartServiceImpl.getOrCreateUsersShoppingCart();
+        ShoppingCart actual = shoppingCartService.getOrCreateUsersShoppingCart();
 
         assertEquals(VALID_SHOPPING_CART, actual);
     }
