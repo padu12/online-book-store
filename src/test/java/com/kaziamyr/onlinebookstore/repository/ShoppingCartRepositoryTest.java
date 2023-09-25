@@ -1,5 +1,7 @@
 package com.kaziamyr.onlinebookstore.repository;
 
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_SHOPPING_CART;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.DELETE_SHOPPING_CART_RELATED_TABLES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.kaziamyr.onlinebookstore.model.Book;
@@ -73,13 +75,13 @@ class ShoppingCartRepositoryTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
+                    DELETE_SHOPPING_CART_RELATED_TABLES,
+                    ADD_SHOPPING_CART
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
+            scripts = DELETE_SHOPPING_CART_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test findShoppingCartByUser() with a valid user")

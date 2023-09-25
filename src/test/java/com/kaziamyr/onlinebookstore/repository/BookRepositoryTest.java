@@ -1,5 +1,11 @@
 package com.kaziamyr.onlinebookstore.repository;
 
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_FICTION;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_LESIA_UKRAINKA_FICTION_RELATION;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_LISOVA_PISNIA;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_ZAKHAR_BERKUT;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_ZAKHAR_BERKUT_FICTION_RELATION;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,16 +46,14 @@ class BookRepositoryTest {
     @DisplayName("Test findBookById() with a valid id")
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fiction-to-categories-table.sql",
-                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
-                    "classpath:database/books_categories"
-                            + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
+                    ADD_FICTION,
+                    ADD_ZAKHAR_BERKUT,
+                    ADD_ZAKHAR_BERKUT_FICTION_RELATION
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/"
-            + "delete-all-from-categories-books-books_categories-tables.sql",
+    @Sql(scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findBookById_validId_returnOptionalOfBook() {
-        Book actual = bookRepository.findBookById(ZAKHAR_BERKUT_ID).get();
+        @SuppressWarnings("OptionalGetWithoutIsPresent") Book actual = bookRepository.findBookById(ZAKHAR_BERKUT_ID).get();
 
         assertEquals(ZAKHAR_BERKUT, actual);
     }
@@ -58,13 +62,11 @@ class BookRepositoryTest {
     @DisplayName("Test findBookById() with an invalid id")
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fiction-to-categories-table.sql",
-                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
-                    "classpath:database/books_categories"
-                            + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
+                    ADD_FICTION,
+                    ADD_ZAKHAR_BERKUT,
+                    ADD_ZAKHAR_BERKUT_FICTION_RELATION
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/"
-            + "delete-all-from-categories-books-books_categories-tables.sql",
+    @Sql(scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findBookById_invalidId_returnEmptyOptional() {
         assertTrue(bookRepository.findBookById(INVALID_BOOK_ID).isEmpty());
@@ -74,16 +76,13 @@ class BookRepositoryTest {
     @DisplayName("Test findBookById() with two books expected")
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fiction-to-categories-table.sql",
-                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
-                    "classpath:database/books_categories"
-                            + "/add-zakhar-berkut-fiction-relation-to-books_categories-table.sql",
-                    "classpath:database/books/add-lisova-pisnia-to-books-table.sql",
-                    "classpath:database/books_categories"
-                            + "/add-lesia-ukrainka-fiction-relation-to-books_categories-table.sql"
+                    ADD_FICTION,
+                    ADD_ZAKHAR_BERKUT,
+                    ADD_ZAKHAR_BERKUT_FICTION_RELATION,
+                    ADD_LISOVA_PISNIA,
+                    ADD_LESIA_UKRAINKA_FICTION_RELATION
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/"
-            + "delete-all-from-categories-books-books_categories-tables.sql",
+    @Sql(scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findAllByCategoryId_validId_returnListOfBooks() {
         Book lisovaPisnia = new Book()

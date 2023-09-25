@@ -1,5 +1,7 @@
 package com.kaziamyr.onlinebookstore.repository;
 
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_ORDER;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.DELETE_ORDER_RELATED_TABLES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.kaziamyr.onlinebookstore.model.Book;
@@ -71,7 +73,7 @@ class OrderRepositoryTest {
             .setId(1L)
             .setUser(USER)
             .setStatus(Order.Status.PENDING)
-            .setTotal(BigDecimal.valueOf(200))
+            .setTotal(BigDecimal.valueOf(220))
             .setOrderDate(LocalDateTime.of(2021, 12, 1, 14, 30, 15))
             .setShippingAddress("123 Main Street")
             .setOrderItems(Set.of(ZAKHAR_BERKUT_ORDER_ITEM, LISOVA_PISNIA_ORDER_ITEM));
@@ -88,13 +90,13 @@ class OrderRepositoryTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-order-related-tables.sql",
-                    "classpath:database/order/add-order-to-orders-table.sql"
+                    DELETE_ORDER_RELATED_TABLES,
+                    ADD_ORDER
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-order-related-tables.sql",
+            scripts = DELETE_ORDER_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test findAllByUser() with a valid user")
@@ -107,13 +109,13 @@ class OrderRepositoryTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-order-related-tables.sql",
-                    "classpath:database/order/add-order-to-orders-table.sql"
+                    DELETE_ORDER_RELATED_TABLES,
+                    ADD_ORDER
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-order-related-tables.sql",
+            scripts = DELETE_ORDER_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test findByIdAndUser() with valid id and user")

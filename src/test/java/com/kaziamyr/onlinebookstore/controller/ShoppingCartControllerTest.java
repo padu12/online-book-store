@@ -1,5 +1,8 @@
 package com.kaziamyr.onlinebookstore.controller;
 
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_EMPTY_SHOPPING_CART;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_SHOPPING_CART;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.DELETE_SHOPPING_CART_RELATED_TABLES;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -131,13 +134,13 @@ class ShoppingCartControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
+                    DELETE_SHOPPING_CART_RELATED_TABLES,
+                    ADD_SHOPPING_CART
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
+            scripts = DELETE_SHOPPING_CART_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test getUsersShoppingCart() with a valid user")
@@ -156,14 +159,13 @@ class ShoppingCartControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/shoppingcart/"
-                            + "add-empty-shopping-cart-to-shopping_carts_table.sql"
+                    DELETE_SHOPPING_CART_RELATED_TABLES,
+                    ADD_EMPTY_SHOPPING_CART
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
+            scripts = DELETE_SHOPPING_CART_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test addBookToShoppingCart() with a valid request dto")
@@ -190,14 +192,13 @@ class ShoppingCartControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/shoppingcart/"
-                            + "add-empty-shopping-cart-to-shopping_carts_table.sql"
+                    DELETE_SHOPPING_CART_RELATED_TABLES,
+                    ADD_EMPTY_SHOPPING_CART
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
+            scripts = DELETE_SHOPPING_CART_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test addBookToShoppingCart() with an invalid request dto")
@@ -216,13 +217,13 @@ class ShoppingCartControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
+                    DELETE_SHOPPING_CART_RELATED_TABLES,
+                    ADD_SHOPPING_CART
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
+            scripts = DELETE_SHOPPING_CART_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test updateBooksInShoppingCart() with valid id and request dto")
@@ -250,13 +251,13 @@ class ShoppingCartControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
+                    DELETE_SHOPPING_CART_RELATED_TABLES,
+                    ADD_SHOPPING_CART
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
+            scripts = DELETE_SHOPPING_CART_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test updateBooksInShoppingCart() with invalid id and request dto")
@@ -272,13 +273,13 @@ class ShoppingCartControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
-                    "classpath:database/shoppingcart/add-shopping-cart-to-shopping_carts-table.sql"
+                    DELETE_SHOPPING_CART_RELATED_TABLES,
+                    ADD_SHOPPING_CART
             },
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/delete-all-data-from-shopping-cart-related-tables.sql",
+            scripts = DELETE_SHOPPING_CART_RELATED_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test deleteBookFromShoppingCart() with a valid id")

@@ -1,5 +1,12 @@
 package com.kaziamyr.onlinebookstore.controller;
 
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_FANTASY;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_FICTION;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_LESIA_UKRAINKA_FICTION_RELATION;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_LISOVA_PISNIA;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_ZAKHAR_BERKUT;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.ADD_ZAKHAR_BERKUT_FICTION_RELATION;
+import static com.kaziamyr.onlinebookstore.config.SqlFilesPaths.DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -60,8 +67,7 @@ class CategoryControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test create() with a valid request body")
@@ -82,8 +88,7 @@ class CategoryControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test create() with an invalid request body")
@@ -99,13 +104,12 @@ class CategoryControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fiction-to-categories-table.sql",
-                    "classpath:database/categories/add-fantasy-to-categories-table.sql"
+                    ADD_FICTION,
+                    ADD_FANTASY
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test getAll() without pagination")
@@ -129,12 +133,11 @@ class CategoryControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fantasy-to-categories-table.sql"
+                    ADD_FANTASY
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test getCategoryById() with a correct id")
@@ -151,12 +154,11 @@ class CategoryControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fantasy-to-categories-table.sql"
+                    ADD_FANTASY
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test getCategoryById() with an invalid id")
@@ -169,12 +171,11 @@ class CategoryControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fiction-to-categories-table.sql"
+                    ADD_FICTION
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test update() with valid id and request dto")
@@ -196,12 +197,11 @@ class CategoryControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fiction-to-categories-table.sql"
+                    ADD_FICTION
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test update() with invalid id and request dto")
@@ -217,12 +217,11 @@ class CategoryControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fiction-to-categories-table.sql"
+                    ADD_FICTION
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test delete() with a valid id")
@@ -235,18 +234,15 @@ class CategoryControllerTest {
     @Test
     @Sql(
             scripts = {
-                    "classpath:database/categories/add-fiction-to-categories-table.sql",
-                    "classpath:database/books/add-lisova-pisnia-to-books-table.sql",
-                    "classpath:database/books/add-zakhar-berkut-to-books-table.sql",
-                    "classpath:database/books_categories/"
-                            + "add-lesia-ukrainka-fiction-relation-to-books_categories-table.sql",
-                    "classpath:database/books_categories/"
-                            + "add-zakhar-berkut-fiction-relation-to-books_categories-table.sql"
+                    ADD_FICTION,
+                    ADD_LISOVA_PISNIA,
+                    ADD_ZAKHAR_BERKUT,
+                    ADD_LESIA_UKRAINKA_FICTION_RELATION,
+                    ADD_ZAKHAR_BERKUT_FICTION_RELATION
             }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
     )
     @Sql(
-            scripts = "classpath:database/"
-                    + "delete-all-from-categories-books-books_categories-tables.sql",
+            scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     @DisplayName("Test getBooksByCategoryId() with valid category id")
