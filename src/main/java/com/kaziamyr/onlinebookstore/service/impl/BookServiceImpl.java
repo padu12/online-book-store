@@ -11,6 +11,7 @@ import com.kaziamyr.onlinebookstore.repository.CategoryRepository;
 import com.kaziamyr.onlinebookstore.service.BookService;
 import com.kaziamyr.onlinebookstore.specification.SpecificationProvider;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,6 +61,8 @@ public class BookServiceImpl implements BookService {
     public BookDto updateById(Long id, CreateBookRequestDto bookDto) {
         Book updatedBook = bookMapper.toModel(bookDto);
         updatedBook.setId(id);
+        updatedBook.setCategories(new HashSet<>(
+                categoryRepository.findAllById(Arrays.asList(bookDto.getCategoryIds()))));
         return bookMapper.toDto(bookRepository.save(updatedBook));
     }
 
@@ -80,6 +83,7 @@ public class BookServiceImpl implements BookService {
             specification = specification.and(sp);
         }
         return bookRepository.findAll(specification).stream()
+                .map(book -> bookRepository.findBookById(book.getId()).get())
                 .map(bookMapper::toDto)
                 .toList();
     }

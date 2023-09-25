@@ -3,6 +3,7 @@ package com.kaziamyr.onlinebookstore.service.impl;
 import com.kaziamyr.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.kaziamyr.onlinebookstore.dto.category.CategoryDto;
 import com.kaziamyr.onlinebookstore.dto.category.SaveCategoryRequestDto;
+import com.kaziamyr.onlinebookstore.exception.EntityNotFoundException;
 import com.kaziamyr.onlinebookstore.mapper.BookMapper;
 import com.kaziamyr.onlinebookstore.mapper.CategoryMapper;
 import com.kaziamyr.onlinebookstore.model.Category;
@@ -38,7 +39,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getById(Long id) {
-        return categoryMapper.toDto(categoryRepository.getReferenceById(id));
+        return categoryMapper.toDto(categoryRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can't find category by id " + id)
+        ));
     }
 
     @Override
