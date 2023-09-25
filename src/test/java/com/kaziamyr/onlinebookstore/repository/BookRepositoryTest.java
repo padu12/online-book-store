@@ -42,6 +42,7 @@ class BookRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Test
     @DisplayName("Test findBookById() with a valid id")
     @Sql(
@@ -53,7 +54,7 @@ class BookRepositoryTest {
     @Sql(scripts = DELETE_CATEGORIES_BOOKS_AND_BOOKS_CATEGORIES_TABLES,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void findBookById_validId_returnOptionalOfBook() {
-        @SuppressWarnings("OptionalGetWithoutIsPresent") Book actual = bookRepository.findBookById(ZAKHAR_BERKUT_ID).get();
+        Book actual = bookRepository.findBookById(ZAKHAR_BERKUT_ID).get();
 
         assertEquals(ZAKHAR_BERKUT, actual);
     }
