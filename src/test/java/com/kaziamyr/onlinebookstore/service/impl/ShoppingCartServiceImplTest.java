@@ -126,7 +126,11 @@ class ShoppingCartServiceImplTest {
     @Test
     @DisplayName("Test getByUser() with a valid user")
     void getByUser_validUser_returnShoppingCartDto() {
-        mockGetShoppingCartData();
+        when(userService.getCurrentUser()).thenReturn(USER);
+        when(shoppingCartRepository.findShoppingCartByUser(any())).thenReturn(
+                Optional.of(VALID_SHOPPING_CART));
+        when(cartItemRepository.findAllByShoppingCart(any())).thenReturn(
+                List.of(ZAKHAR_BERKUT_CART_ITEM, LISOVA_PISNIA_CART_ITEM));
         when(shoppingCartMapper.toDto(any())).thenReturn(VALID_SHOPPING_CART_DTO);
 
         ShoppingCartDto actual = shoppingCartService.getByUser();
@@ -137,10 +141,14 @@ class ShoppingCartServiceImplTest {
     @Test
     @DisplayName("Test addBookToShoppingCart() with a valid request book")
     void addBookToShoppingCart_validBook_returnCartItemDto() {
-        final CreateCartItemRequestDto cartItemRequestDto = new CreateCartItemRequestDto()
+        CreateCartItemRequestDto cartItemRequestDto = new CreateCartItemRequestDto()
                 .setBookId(1L)
                 .setQuantity(5);
-        mockGetShoppingCartData();
+        when(userService.getCurrentUser()).thenReturn(USER);
+        when(shoppingCartRepository.findShoppingCartByUser(any())).thenReturn(
+                Optional.of(VALID_SHOPPING_CART));
+        when(cartItemRepository.findAllByShoppingCart(any())).thenReturn(
+                List.of(ZAKHAR_BERKUT_CART_ITEM, LISOVA_PISNIA_CART_ITEM));
         when(shoppingCartRepository.save(any())).thenReturn(null);
         when(cartItemMapper.toCartItemDto(any())).thenReturn(ZAKHAR_BERKUT_CART_ITEM_DTO);
 
@@ -154,7 +162,11 @@ class ShoppingCartServiceImplTest {
     void updateBookInShoppingCart_validId_returnCartItemDto() {
         PutCartItemRequestDto putCartItemRequestDto = new PutCartItemRequestDto();
         putCartItemRequestDto.setQuantity(5);
-        mockGetShoppingCartData();
+        when(userService.getCurrentUser()).thenReturn(USER);
+        when(shoppingCartRepository.findShoppingCartByUser(any())).thenReturn(
+                Optional.of(VALID_SHOPPING_CART));
+        when(cartItemRepository.findAllByShoppingCart(any())).thenReturn(
+                List.of(ZAKHAR_BERKUT_CART_ITEM, LISOVA_PISNIA_CART_ITEM));
         when(shoppingCartRepository.save(any())).thenReturn(null);
         when(cartItemMapper.toCartItemDto(any())).thenReturn(ZAKHAR_BERKUT_CART_ITEM_DTO);
 
@@ -176,18 +188,14 @@ class ShoppingCartServiceImplTest {
     @Test
     @DisplayName("Test getOrCreateUsersSHoppingCart() with a valid id")
     void getOrCreateUsersShoppingCart_validId_returnShoppingCart() {
-        mockGetShoppingCartData();
-
-        ShoppingCart actual = shoppingCartService.getOrCreateUsersShoppingCart();
-
-        assertEquals(VALID_SHOPPING_CART, actual);
-    }
-
-    private void mockGetShoppingCartData() {
         when(userService.getCurrentUser()).thenReturn(USER);
         when(shoppingCartRepository.findShoppingCartByUser(any())).thenReturn(
                 Optional.of(VALID_SHOPPING_CART));
         when(cartItemRepository.findAllByShoppingCart(any())).thenReturn(
                 List.of(ZAKHAR_BERKUT_CART_ITEM, LISOVA_PISNIA_CART_ITEM));
+
+        ShoppingCart actual = shoppingCartService.getOrCreateUsersShoppingCart();
+
+        assertEquals(VALID_SHOPPING_CART, actual);
     }
 }
