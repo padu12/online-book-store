@@ -155,10 +155,6 @@ class OrderServiceImplTest {
                 .thenReturn(LISOVA_PISNIA_ORDER_ITEM);
         when(orderRepository.save(any())).thenReturn(VALID_ORDER);
         when(orderMapper.toDto(any())).thenReturn(VALID_ORDER_DTO);
-        when(orderItemMapper.toDto(ZAKHAR_BERKUT_ORDER_ITEM))
-                .thenReturn(ZAKHAR_BERKUT_ORDER_ITEM_DTO);
-        when(orderItemMapper.toDto(LISOVA_PISNIA_ORDER_ITEM))
-                .thenReturn(LISOVA_PISNIA_ORDER_ITEM_DTO);
 
         OrderDto actual = orderServiceImpl.create(shippingAddressDto);
 
