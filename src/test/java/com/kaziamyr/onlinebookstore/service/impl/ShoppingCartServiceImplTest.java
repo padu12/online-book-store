@@ -20,6 +20,7 @@ import com.kaziamyr.onlinebookstore.model.ShoppingCart;
 import com.kaziamyr.onlinebookstore.model.User;
 import com.kaziamyr.onlinebookstore.repository.CartItemRepository;
 import com.kaziamyr.onlinebookstore.repository.ShoppingCartRepository;
+import com.kaziamyr.onlinebookstore.service.UserService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -112,7 +113,7 @@ class ShoppingCartServiceImplTest {
     @Mock
     private ShoppingCartMapper shoppingCartMapper;
     @Mock
-    private UserServiceImpl userService;
+    private UserService userService;
     @InjectMocks
     private ShoppingCartServiceImpl shoppingCartService;
 
