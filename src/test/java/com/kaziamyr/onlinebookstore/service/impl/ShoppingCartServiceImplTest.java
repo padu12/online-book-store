@@ -174,7 +174,8 @@ class ShoppingCartServiceImplTest {
     }
 
     @Test
-    void getOrCreateUsersShoppingCart() {
+    @DisplayName("Test getOrCreateUsersSHoppingCart() with a valid id")
+    void getOrCreateUsersShoppingCart_validId_returnShoppingCart() {
         mockGetShoppingCartData();
 
         ShoppingCart actual = shoppingCartService.getOrCreateUsersShoppingCart();
