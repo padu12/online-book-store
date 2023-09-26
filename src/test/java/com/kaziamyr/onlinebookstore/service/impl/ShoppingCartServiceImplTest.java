@@ -137,7 +137,7 @@ class ShoppingCartServiceImplTest {
     @Test
     @DisplayName("Test addBookToShoppingCart() with a valid request book")
     void addBookToShoppingCart_validBook_returnCartItemDto() {
-        CreateCartItemRequestDto cartItemRequestDto = new CreateCartItemRequestDto()
+        final CreateCartItemRequestDto cartItemRequestDto = new CreateCartItemRequestDto()
                 .setBookId(1L)
                 .setQuantity(5);
         mockGetShoppingCartData();
