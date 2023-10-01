@@ -13,6 +13,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserRegistrationResponseDto register(UserRegistrationRequestDto request)
@@ -28,9 +30,10 @@ public class UserServiceImpl implements UserService {
             throw new RegistrationException("User with email "
                     + request.getEmail() + " is already present!");
         }
-        User savedUser = userRepository.save(userMapper.toModel(request));
-        savedUser.setRoles(Set.of(new Role(1L, Role.RoleName.ROLE_USER)));
-        return userMapper.toUserResponseDto(savedUser);
+        User user = userMapper.toModel(request);
+        user.setRoles(Set.of(new Role(1L, Role.RoleName.ROLE_USER)));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        return userMapper.toUserResponseDto(userRepository.save(user));
     }
 
     @Override
