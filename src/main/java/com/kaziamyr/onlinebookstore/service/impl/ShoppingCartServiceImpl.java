@@ -96,6 +96,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (shoppingCartOptional.isEmpty()) {
             ShoppingCart newShoppingCart = new ShoppingCart();
             newShoppingCart.setUser(user);
+            newShoppingCart.setCartItems(new HashSet<>());
             shoppingCart = shoppingCartRepository.save(newShoppingCart);
         } else {
             shoppingCart = shoppingCartOptional.get();
