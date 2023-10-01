@@ -114,11 +114,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     private ShoppingCart getNewShoppingCart(User user) {
-        ShoppingCart shoppingCart;
         ShoppingCart newShoppingCart = new ShoppingCart();
         newShoppingCart.setUser(user);
-        shoppingCart = shoppingCartRepository.save(newShoppingCart);
-        return shoppingCart;
+        newShoppingCart.setCartItems(new HashSet<>());
+        return shoppingCartRepository.save(newShoppingCart);
     }
 
     private static CartItem addQuantity(
