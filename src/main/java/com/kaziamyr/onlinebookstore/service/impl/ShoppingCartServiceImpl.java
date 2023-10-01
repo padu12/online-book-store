@@ -14,13 +14,12 @@ import com.kaziamyr.onlinebookstore.repository.BookRepository;
 import com.kaziamyr.onlinebookstore.repository.CartItemRepository;
 import com.kaziamyr.onlinebookstore.repository.ShoppingCartRepository;
 import com.kaziamyr.onlinebookstore.service.ShoppingCartService;
+import com.kaziamyr.onlinebookstore.service.UserService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -31,6 +30,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final CartItemMapper cartItemMapper;
     private final ShoppingCartMapper shoppingCartMapper;
+    private final UserService userService;
 
     @Override
     public ShoppingCartDto getByUser() {
@@ -91,9 +91,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItemRepository.deleteById(id);
     }
 
+    @Override
     public ShoppingCart getOrCreateUsersShoppingCart() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
+        User user = userService.getCurrentUser();
         Optional<ShoppingCart> shoppingCartOptional =
                 shoppingCartRepository.findShoppingCartByUser(user);
         ShoppingCart shoppingCart;

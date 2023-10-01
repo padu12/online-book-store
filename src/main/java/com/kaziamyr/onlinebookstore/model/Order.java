@@ -17,6 +17,7 @@ import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.SQLDelete;
@@ -27,6 +28,7 @@ import org.hibernate.annotations.Where;
 @Where(clause = "is_deleted=false")
 @Table(name = "orders")
 @Data
+@Accessors(chain = true)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
