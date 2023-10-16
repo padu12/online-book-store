@@ -131,7 +131,7 @@ To set up and use the Online Book Store API, follow these steps:
 - Access the API documentation and testing interface by visiting 
 [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 - Start making API requests as per the documentation. You can use [Online Book Store.postman_collection.json](Online%20Book%20Store.postman_collection.json)
-- Here is a [video](https://www.loom.com/share/0eed450468064439ae5a1cd9a741165d?sid=f9157ee2-5b5f-445b-b17f-56a5e6fc06f7) where we can see our API in action 
+- Here is a [video](https://www.loom.com/share/e4215dffefdf420887f31fd638b8a9d0?sid=22cc9980-4d27-4a43-992b-111d64ccae29) where we can see our API in action 
 
 ## Challenges and Solutions
 
